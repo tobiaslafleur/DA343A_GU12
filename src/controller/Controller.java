@@ -1,14 +1,19 @@
 package controller;
 
-import model.client.Client;
+import model.User;
+import view.MainFrame;
+
+import javax.swing.*;
 
 public class Controller {
+    private MainFrame view;
 
     public Controller() {
-        Client client = new Client("83.249.103.28", 2345);
-        Client client2 = new Client("83.249.103.28", 2345);
-        Client client3 = new Client("83.249.103.28", 2345);
-
+        view = new MainFrame(this);
     }
 
+    public void setUser(String username, ImageIcon icon) {
+        User user = new User(username, icon);
+        System.out.println(username + " + " + icon);
+    }
 }
