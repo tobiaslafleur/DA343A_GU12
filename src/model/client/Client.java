@@ -1,5 +1,6 @@
 package model.client;
 
+import model.Message;
 import model.User;
 
 import java.io.IOException;
@@ -27,6 +28,11 @@ public class Client {
             if (socket.isConnected()) {
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
+
+                Message message = new Message("This is a message", null);
+
+                oos.writeObject(message);
+                oos.flush();
             }
 
             startClient();
