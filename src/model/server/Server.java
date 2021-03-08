@@ -53,7 +53,8 @@ public class Server {
                         if(obj instanceof User) {
                             rwf.writeUser((User)obj);
                         } else if(obj instanceof Message) {
-
+                            Message message = (Message) obj;
+                            System.out.println(message.getText() + ", " + message.getDateTime());
                         }
 
                     }
