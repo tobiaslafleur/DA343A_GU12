@@ -59,7 +59,7 @@ public class Server extends Thread{
 
 
     public void getLogs(Date dateStart, Date dateEnd) {
-        System.out.println();
+       
     }
 
     public User findContact(String contact) {
