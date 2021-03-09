@@ -3,6 +3,7 @@ package model.server;
 import model.*;
 import java.io.*;
 import java.net.*;
+import java.time.*;
 import java.util.*;
 
 public class Server {
@@ -39,8 +40,6 @@ public class Server {
                 try {
                     userList = rwf.getUsers();
 
-                    System.out.println(userList);
-
                     Socket socket = serverSocket.accept();
 
                     if(socket.isConnected()) {
@@ -54,7 +53,7 @@ public class Server {
                             rwf.writeUser((User)obj);
                         } else if(obj instanceof Message) {
                             Message message = (Message) obj;
-                            System.out.println(message.getText() + ", " + message.getDateTime());
+                            message.setMessageReceived(LocalDateTime.now());
                         }
 
                     }
