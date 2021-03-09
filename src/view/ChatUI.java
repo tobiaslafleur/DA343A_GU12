@@ -1,5 +1,7 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,8 +20,10 @@ public class ChatUI extends JFrame {
     private JTextArea chatBox;
     private JButton logOff;
     private JLabel label;
+    private Controller controller;
 
-    public ChatUI() {
+    public ChatUI(Controller controller) {
+        this.controller = controller;
         createComponents();
     }
 
@@ -55,6 +59,7 @@ public class ChatUI extends JFrame {
 
         chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
         sendMessage.addActionListener(new sendMessageButtonListener());
+        logOff.addActionListener(new logOffListener());
 
         southPanel.add(inputBox, left);
         southPanel.add(sendMessage, right);
@@ -74,6 +79,14 @@ public class ChatUI extends JFrame {
                 chatBox.append("<" + username + ">:  " + inputBox.getText() + " " + " at:" + new Date() + "\n");
                 inputBox.setText("");
             }
+        }
+    }
+    private class logOffListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            controller.logOff();
+            newFrame.dispose();
         }
     }
 }
