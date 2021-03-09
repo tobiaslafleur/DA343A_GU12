@@ -7,5 +7,4 @@ public class MainProgram {
 
 
 
-    // För Satya
 }
