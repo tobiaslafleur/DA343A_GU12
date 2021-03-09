@@ -8,14 +8,14 @@ import javax.swing.*;
 
 public class Controller {
     private MainFrame view;
-
+    private Client client;
 
     public Controller() {
         view = new MainFrame(this);
     }
 
     public void setUser(String username, ImageIcon icon) {
-        User user = new User(username, icon);
-        System.out.println(username);
+        new User(username, icon, client.getSocket());
+        client = new Client("83.249.103.28", 2345);
     }
 }

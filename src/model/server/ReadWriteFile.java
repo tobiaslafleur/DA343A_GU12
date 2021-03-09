@@ -14,6 +14,8 @@ public class ReadWriteFile {
 
     private List<User> userList;
 
+    private String filePath = "files/userlist.dat";
+
     public ReadWriteFile() {
         userList = new ArrayList<>();
         readFromFile();
@@ -23,7 +25,7 @@ public class ReadWriteFile {
         try {
             userList.add(user);
 
-            fos = new FileOutputStream("files/userlist.dat");
+            fos = new FileOutputStream(filePath);
             oos = new ObjectOutputStream(fos);
 
             oos.writeObject(userList);
@@ -39,7 +41,7 @@ public class ReadWriteFile {
 
     public void readFromFile() {
         try {
-            fis = new FileInputStream("files/userlist.dat");
+            fis = new FileInputStream(filePath);
             ois = new ObjectInputStream(fis);
 
             Object obj = ois.readObject();

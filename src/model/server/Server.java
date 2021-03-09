@@ -3,6 +3,7 @@ package model.server;
 import model.*;
 import java.io.*;
 import java.net.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Server {
@@ -11,6 +12,7 @@ public class Server {
     private ObjectOutputStream oos;
     private ReadWriteFile rwf;
     private List<User> userList;
+    private List<ClientHandler> clientHandlers;
 
     public static void main(String[] args) {
         Server server = new Server(2345);
@@ -22,6 +24,7 @@ public class Server {
             serverSocket = new ServerSocket(port);
             rwf = new ReadWriteFile();
             userList = new ArrayList<>();
+            clientHandlers = new ArrayList<>();
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -51,9 +54,18 @@ public class Server {
                         Object obj = ois.readObject();
 
                         if(obj instanceof User) {
-                            rwf.writeUser((User)obj);
+                            clientHandlers.add(new ClientHandler(socket, (User) obj));
+                            rwf.writeUser((User) obj);
                         } else if(obj instanceof Message) {
+                            for(ClientHandler ch : clientHandlers) {
+                                if(ch.socket == socket) {
+                                    
 
+                                    Message message = (Message) obj;
+                                    message.setMessageReceived(LocalDateTime.now());
+                                    ch.sendMessage((Message) obj);
+                                }
+                            }
                         }
 
                     }
@@ -62,6 +74,20 @@ public class Server {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    class ClientHandler {
+        private Socket socket;
+        private User user;
+
+        public ClientHandler(Socket socket, User user) {
+            this.socket = socket;
+            this.user = user;
+        }
+
+        public void sendMessage(Message message) {
+
         }
     }
 }

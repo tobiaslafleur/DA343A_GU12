@@ -2,6 +2,7 @@ package model;
 
 import javax.swing.*;
 import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 public class User implements Serializable {
@@ -11,8 +12,9 @@ public class User implements Serializable {
     private String username;
     private ImageIcon icon;
     private List<User> contacts;
+    private Socket socket;
 
-    public User(String username, ImageIcon icon) {
+    public User(String username, ImageIcon icon, Socket socket) {
         this.username = username;
         this.icon = icon;
         contacts = new ArrayList<>();

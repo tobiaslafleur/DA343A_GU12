@@ -34,6 +34,13 @@ public class Client {
         }
     }
 
+    public Socket getSocket() {
+        if(socket == null) {
+            return null;
+        }
+        return socket;
+    }
+
     private void startClient() {
         ClientThread clientThread = new ClientThread();
         clientThread.start();
