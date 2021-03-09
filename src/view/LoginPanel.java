@@ -87,6 +87,12 @@ public class LoginPanel extends JPanel {
         revalidate();
     }
 
+    public void reset() {
+        lblIcon.setIcon(null);
+        lblIcon.setText("Icon goes here");
+        txtUsername.setText("");
+    }
+
     private class BtnLoginListener implements ActionListener {
 
         @Override
@@ -96,6 +102,7 @@ public class LoginPanel extends JPanel {
 
             if(!username.isEmpty() && icon != null) {
                 mainFrame.setUser(username, icon);
+                mainFrame.updateGuiToChat();
             }
         }
     }

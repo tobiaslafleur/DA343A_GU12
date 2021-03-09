@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
         setLocation(new Point(500, 100));
     }
 
-    public void updateGui() {
+    public void updateGuiToChat() {
         remove(loginPanel);
 
         setLayout(new GridBagLayout());
@@ -56,9 +56,29 @@ public class MainFrame extends JFrame {
         revalidate();
     }
 
+    public void updateGuiToLogin() {
+        remove(chatPanel);
+        loginPanel.reset();
+
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(loginPanel,gbc);
+
+        pack();
+        repaint();
+        revalidate();
+    }
+
     public void setImage(String filepath) {loginPanel.setImage(filepath);}
 
     public void setUser(String username, ImageIcon icon) {
         controller.setUser(username, icon);
+    }
+
+    public void logOff() {
+        controller.logOff();
     }
 }

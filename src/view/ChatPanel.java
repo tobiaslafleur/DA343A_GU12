@@ -101,6 +101,7 @@ public class ChatPanel extends JPanel {
 
     private void registerListeners() {
         btnSendMsg.addActionListener(new BtnSendMsgListener());
+        btnLogOff.addActionListener(new BtnLogOffListener());
     }
 
     class BtnSendMsgListener implements ActionListener {
@@ -114,6 +115,15 @@ public class ChatPanel extends JPanel {
                 txtAreaChatBox.append("<" + username + ">:  " + txtMessageBox.getText() + " " + " at:" + new Date() + "\n");
                 txtMessageBox.setText("");
             }
+        }
+    }
+
+    class BtnLogOffListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            mainFrame.updateGuiToLogin();
+            mainFrame.logOff();
         }
     }
 
