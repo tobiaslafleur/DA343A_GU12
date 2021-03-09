@@ -2,7 +2,6 @@ package controller;
 
 import model.User;
 import model.client.Client;
-import view.ChatUI;
 import view.MainFrame;
 
 import javax.swing.*;

@@ -67,7 +67,9 @@ public class Client {
                     Object obj = ois.readObject();
 
                     if(obj instanceof List) {
-                        controller.updateOnlineUsers((ArrayList<String>) obj);
+                        ArrayList<String> list = (ArrayList<String>) obj;
+                        System.out.println(list);
+                        controller.updateOnlineUsers(list);
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();

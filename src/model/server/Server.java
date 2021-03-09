@@ -1,24 +1,21 @@
 package model.server;
 
 import model.*;
+import model.client.Client;
+
 import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Server {
+public class Server extends Thread{
     private ServerSocket serverSocket;
     private ObjectInputStream ois;;
     private ObjectOutputStream oos;
     private ReadWriteFile rwf;
     private List<User> userList;
     private List<ClientHandler> clientHandlers;
-    private List<String> currentUsers;
-
-    public static void main(String[] args) {
-        Server server = new Server(2345);
-        server.startServer();
-    }
+    private ArrayList<String> currentUsers;
 
     public Server(int port) {
         try {
@@ -27,27 +24,39 @@ public class Server {
             userList = new ArrayList<>();
             clientHandlers = new ArrayList<>();
             currentUsers = new ArrayList<>();
+            start();
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void startServer() {
-        ServerThread serverThread = new ServerThread();
-        serverThread.start();
-    }
+    @Override
+    public void run() {
+        ClientHandler clientHandler = null;
 
-    private boolean isUserOnline(User user) {
-        for(ClientHandler ch : clientHandlers) {
-            if(ch.user.getUsername().equals(user.getUsername())) {
-                return true;
+        while(true) {
+            try {
+                Socket socket = serverSocket.accept();
+
+                if(socket != null) {
+                    clientHandler = new ClientHandler(socket, this);
+                    clientHandlers.add(clientHandler);
+                    clientHandler.start();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        return false;
     }
 
-    class ServerThread extends Thread {
-        @Override
+    public void updateOnlineUsers() {
+        for(ClientHandler ch : clientHandlers) {
+            ch.sendOnlineList(currentUsers);
+        }
+    }
+
+    /*class ServerThread {
+
         public void run() {
             while(true) {
                 try {
@@ -67,10 +76,8 @@ public class Server {
                         if(obj instanceof User) {
                             if(!isUserOnline((User) obj)) {
                                 clientHandlers.add(new ClientHandler(socket, (User) obj));
-                                rwf.writeUser((User) obj);
+                                //rwf.writeUser((User) obj);
                                 currentUsers.add(((User) obj).getUsername());
-                                oos.writeObject(currentUsers);
-                                oos.flush();
                             } else {
                                 System.out.println("User already online");
                             }
@@ -85,6 +92,11 @@ public class Server {
                                 }
                             }
                         }
+
+                        for(ClientHandler ch : clientHandlers) {
+                            System.out.println(currentUsers);
+                            ch.sendOnlineList(currentUsers);
+                        }
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
@@ -92,19 +104,61 @@ public class Server {
                 }
             }
         }
-    }
+    }*/
 
-    class ClientHandler {
+    class ClientHandler extends Thread{
         private Socket socket;
+        private Server server;
         private User user;
 
-        public ClientHandler(Socket socket, User user) {
+        private ObjectInputStream ois;
+        private ObjectOutputStream oos;
+
+        public ClientHandler(Socket socket, Server server) {
             this.socket = socket;
-            this.user = user;
+            this.server = server;
+
+            try {
+                ois = new ObjectInputStream(socket.getInputStream());
+                oos = new ObjectOutputStream(socket.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void run() {
+            while(true) {
+                try {
+                    Object obj = ois.readObject();
+
+                    if(obj instanceof User) {
+                        this.user = (User) obj;
+                        currentUsers.add(user.getUsername());
+                    } else if(obj instanceof Message) {
+                        Message message = (Message) obj;
+                        message.setMessageReceived(LocalDateTime.now());
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                server.updateOnlineUsers();
+            }
         }
 
         public void sendMessage(Message message) {
             //oos.flush();
+        }
+
+        public void sendOnlineList(ArrayList<String> list) {
+            try {
+                oos.writeObject(list);
+                oos.flush();
+                oos.reset();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
