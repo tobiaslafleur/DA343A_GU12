@@ -59,18 +59,18 @@ public class MainFrame extends JFrame {
 
     public void updateGuiToLogin() {
         remove(chatPanel);
-        loginPanel.reset();
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(loginPanel,gbc);
+        add(loginPanel, gbc);
 
         pack();
         repaint();
         revalidate();
+
+        controller.restartClient();
     }
 
     public void setImage(String filepath) {loginPanel.setImage(filepath);}
@@ -85,5 +85,13 @@ public class MainFrame extends JFrame {
 
     public void updateOnlineUsers(ArrayList<String> users) {
         chatPanel.updateOnlineUsers(users);
+    }
+
+    public void addContact(String selected) {
+        controller.addContact(selected);
+    }
+
+    public void updateContactList(ArrayList<String> arrayList) {
+        chatPanel.updateContactList(arrayList);
     }
 }
