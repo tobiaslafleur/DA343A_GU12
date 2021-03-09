@@ -42,9 +42,9 @@ public class LoginPanel extends JPanel {
 
     private void initializeGUI() {
         setLayout(new GridBagLayout());
-        setPreferredSize(new Dimension(600, 800));
-        setMaximumSize(new Dimension(600,800));
-        setMinimumSize(new Dimension(600,800));
+        setPreferredSize(new Dimension(900, 600));
+        setMaximumSize(new Dimension(900,600));
+        setMinimumSize(new Dimension(900,600));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -96,7 +96,6 @@ public class LoginPanel extends JPanel {
 
             if(!username.isEmpty() && icon != null) {
                 mainFrame.setUser(username, icon);
-                mainFrame.dispose();
             }
         }
     }

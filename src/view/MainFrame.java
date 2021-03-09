@@ -27,7 +27,6 @@ public class MainFrame extends JFrame {
         setPreferredSize(new Dimension(900,600));
         setVisible(true);
         setResizable(false);
-        setBackground(Color.WHITE);
         setLayout(new GridBagLayout());
     }
 
@@ -43,20 +42,18 @@ public class MainFrame extends JFrame {
         setLocation(new Point(500, 100));
     }
 
-    private void updateGui() {
+    public void updateGui() {
         remove(loginPanel);
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(loginPanel,gbc);
+        add(chatPanel, gbc);
 
         pack();
         repaint();
         revalidate();
-        setLocation(new Point(500, 100));
     }
 
     public void setImage(String filepath) {loginPanel.setImage(filepath);}
