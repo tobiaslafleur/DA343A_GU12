@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,15 @@ public class Client {
         clientThread.start();
     }
 
+    public void sendMessage(Message message) {
+        try {
+            oos.writeObject(message);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     class ClientThread extends Thread {
         @Override
         public void run() {
@@ -81,7 +91,9 @@ public class Client {
                         controller.setContact((User) obj);
                         controller.updateContactList();
                     } else if(obj instanceof Message) {
-                        
+                        Message message = (Message) obj;
+                        message.setMessageSent(LocalDateTime.now());
+                        controller.showMessage(message);
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();

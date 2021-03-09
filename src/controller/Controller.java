@@ -1,5 +1,6 @@
 package controller;
 
+import model.Message;
 import model.User;
 import model.client.Client;
 import view.MainFrame;
@@ -55,6 +56,16 @@ public class Controller {
 
     public void restartClient() {
         client = null;
+    }
+
+    public void createMessage(String text, ImageIcon icon, ArrayList<String> arrayList) {
+        Message message = new Message(text, icon, client.getUser(), arrayList) ;
+
+        client.sendMessage(message);
+    }
+
+    public void showMessage(Message message) {
+        view.setMessageText(message.getText());
     }
 
     private class ClientListener implements PropertyChangeListener {

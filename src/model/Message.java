@@ -12,25 +12,25 @@ public class Message implements Serializable {
     private String text;
     private ImageIcon icon;
     private User user;
-    private List<User> receivers;
+    private ArrayList<String> receivers;
 
     private LocalDateTime messageReceived;
     private LocalDateTime messageSent;
 
-    public Message(String text, ImageIcon icon, User user, ArrayList<User> receivers) {
+    public Message(String text, ImageIcon icon, User user, ArrayList<String> receivers) {
         this.text = text;
         this.icon = icon;
         this.user = user;
         this.receivers = receivers;
     }
 
-    public Message(String text, User user, ArrayList<User> receivers) {
+    public Message(String text, User user, ArrayList<String> receivers) {
         this.text = text;
         this.user = user;
         this.receivers = receivers;
     }
 
-    public Message(ImageIcon icon, User user, ArrayList<User> receivers) {
+    public Message(ImageIcon icon, User user, ArrayList<String> receivers) {
         this.icon = icon;
         this.user = user;
         this.receivers = receivers;
@@ -60,11 +60,11 @@ public class Message implements Serializable {
         this.user = user;
     }
 
-    public List<User> getReceivers() {
+    public ArrayList<String> getReceivers() {
         return receivers;
     }
 
-    public void setReceivers(List<User> receivers) {
+    public void setReceivers(ArrayList<String> receivers) {
         this.receivers = receivers;
     }
 

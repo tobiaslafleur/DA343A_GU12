@@ -94,4 +94,12 @@ public class MainFrame extends JFrame {
     public void updateContactList(ArrayList<String> arrayList) {
         chatPanel.updateContactList(arrayList);
     }
+
+    public void createMessage(String text, ImageIcon icon, ArrayList<String> arrayList) {
+        controller.createMessage(text, icon, arrayList);
+    }
+
+    public void setMessageText(String text) {
+        chatPanel.setMessageText(text);
+    }
 }

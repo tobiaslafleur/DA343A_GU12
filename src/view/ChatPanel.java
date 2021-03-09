@@ -134,16 +134,25 @@ public class ChatPanel extends JPanel {
         dlmContactList.addAll(arrayList);
     }
 
-    class BtnSendMsgListener implements ActionListener {
+    public void setMessageText(String text) {
+        txtAreaChatBox.append(text + "\n");
+    }
 
-        private String username = "Måns";
+    class BtnSendMsgListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
             if (txtMessageBox.getText().length() < 1) {
                 // do nothing
             } else {
-                txtAreaChatBox.append("<" + username + ">:  " + txtMessageBox.getText() + " " + " at:" + new Date() + "\n");
-                txtMessageBox.setText("");
+                //txtAreaChatBox.append("<" + ">:  " + txtMessageBox.getText() + " " + " at:" + new Date() + "\n");
+                //txtMessageBox.setText("");
+                String text = txtMessageBox.getText();
+                ImageIcon icon = null;
+
+                ArrayList<String> arrayList = new ArrayList<>();
+                arrayList.add("tobias");
+
+                mainFrame.createMessage(text, icon, arrayList);
             }
         }
     }

@@ -75,7 +75,10 @@ public class Server extends Thread{
     public void sendMessage(Message message) {
         for(int i = 0; i < message.getReceivers().size(); i++) {
             for(ClientHandler ch : clientHandlers) {
-                if(message.getReceivers().get(i) == ch.user) {
+                if(message.getReceivers().get(i).equals(ch.user.getUsername())) {
+                    ch.sendMessage(message);
+                }
+                if(message.getUser() == ch.user) {
                     ch.sendMessage(message);
                 }
             }
@@ -163,6 +166,7 @@ public class Server extends Thread{
                     if(obj instanceof User) {
                         this.user = (User) obj;
                         currentUsers.add(user.getUsername());
+                        server.updateOnlineUsers();
                     } else if(obj instanceof Message) {
                         Message message = (Message) obj;
                         message.setMessageReceived(LocalDateTime.now());
@@ -173,6 +177,7 @@ public class Server extends Thread{
                             server.removeFromOnlineList(user);
                             stopConnection();
                             server.removeHandler(this);
+                            server.updateOnlineUsers();
                             running = false;
                         } else {
                             User contact = server.findContact((String) obj);
@@ -183,8 +188,6 @@ public class Server extends Thread{
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
-                server.updateOnlineUsers();
             }
         }
 
