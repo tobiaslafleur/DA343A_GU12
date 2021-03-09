@@ -10,28 +10,19 @@ public class Message implements Serializable {
     private String text;
     private ImageIcon icon;
     private User user;
-    private String dateTime;
 
-    private LocalDateTime ldt;
+    private LocalDateTime messageReceived;
+    private LocalDateTime messageSent;
 
     public Message(String text, ImageIcon icon, User user) {
         this.text = text;
         this.icon = icon;
         this.user = user;
-        formatDateAndTime();
     }
 
     public Message(String text, User user) {
         this.text = text;
         this.user = user;
-        formatDateAndTime();
-    }
-
-    public void formatDateAndTime() {
-        ldt = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-        dateTime = ldt.format(formatter);
     }
 
     public String getText() {
@@ -58,11 +49,34 @@ public class Message implements Serializable {
         this.user = user;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public LocalDateTime getMessageReceived() {
+        return messageReceived;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setMessageReceived(LocalDateTime messageReceived) {
+        this.messageReceived = messageReceived;
     }
+
+    public LocalDateTime getMessageSent() {
+        return messageSent;
+    }
+
+    public void setMessageSent(LocalDateTime messageSent) {
+        this.messageSent = messageSent;
+    }
+
+    public String getMessageReceivedString() {
+        messageReceived = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        return messageReceived.format(formatter);
+    }
+
+    public String getMessageSentString() {
+        messageSent = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        return messageSent.format(formatter);
+    }
+
 }
