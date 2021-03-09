@@ -1,6 +1,5 @@
 package model.client;
 
-import model.Message;
 import model.User;
 
 import java.io.IOException;
@@ -16,8 +15,6 @@ public class Client {
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
 
-    private String name;
-
     public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
@@ -28,11 +25,6 @@ public class Client {
             if (socket.isConnected()) {
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 ois = new ObjectInputStream(socket.getInputStream());
-
-                Message message = new Message("This is a message", null);
-
-                oos.writeObject(message);
-                oos.flush();
             }
 
             startClient();
