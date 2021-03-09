@@ -4,6 +4,7 @@ import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
 
@@ -80,5 +81,9 @@ public class MainFrame extends JFrame {
 
     public void logOff() {
         controller.logOff();
+    }
+
+    public void updateOnlineUsers(ArrayList<String> users) {
+        chatPanel.updateOnlineUsers(users);
     }
 }

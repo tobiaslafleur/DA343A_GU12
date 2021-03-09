@@ -13,6 +13,7 @@ public class Server {
     private ReadWriteFile rwf;
     private List<User> userList;
     private List<ClientHandler> clientHandlers;
+    private List<String> currentUsers;
 
     public static void main(String[] args) {
         Server server = new Server(2345);
@@ -25,6 +26,7 @@ public class Server {
             rwf = new ReadWriteFile();
             userList = new ArrayList<>();
             clientHandlers = new ArrayList<>();
+            currentUsers = new ArrayList<>();
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -35,14 +37,23 @@ public class Server {
         serverThread.start();
     }
 
+    private boolean isUserOnline(User user) {
+        for(ClientHandler ch : clientHandlers) {
+            if(ch.user.getUsername().equals(user.getUsername())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     class ServerThread extends Thread {
         @Override
         public void run() {
             while(true) {
                 try {
-                    userList = rwf.getUsers();
+                    //userList = rwf.getUsers();
 
-                    System.out.println(userList);
+                    //System.out.println(userList);
 
                     Socket socket = serverSocket.accept();
 
@@ -54,8 +65,15 @@ public class Server {
                         Object obj = ois.readObject();
 
                         if(obj instanceof User) {
-                            clientHandlers.add(new ClientHandler(socket, (User) obj));
-                            rwf.writeUser((User) obj);
+                            if(!isUserOnline((User) obj)) {
+                                clientHandlers.add(new ClientHandler(socket, (User) obj));
+                                rwf.writeUser((User) obj);
+                                currentUsers.add(((User) obj).getUsername());
+                                oos.writeObject(currentUsers);
+                                oos.flush();
+                            } else {
+                                System.out.println("User already online");
+                            }
                         } else if(obj instanceof Message) {
                             Message message = (Message) obj;
                             message.setMessageReceived(LocalDateTime.now());
@@ -67,7 +85,6 @@ public class Server {
                                 }
                             }
                         }
-
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
@@ -87,7 +104,7 @@ public class Server {
         }
 
         public void sendMessage(Message message) {
-
+            //oos.flush();
         }
     }
 }
