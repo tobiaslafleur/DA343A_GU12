@@ -6,6 +6,8 @@ import view.ChatUI;
 import view.MainFrame;
 
 import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 public class Controller {
@@ -19,6 +21,7 @@ public class Controller {
     public void setUser(String username, ImageIcon icon) {
         User user = new User(username, icon);
         client = new Client("83.249.103.28", 2345, user, this);
+        client.addPropertyChangeListener(new ClientListener());
         client.login();
     }
 
@@ -28,5 +31,13 @@ public class Controller {
 
     public void updateOnlineUsers(ArrayList<String> users) {
         view.updateOnlineUsers(users);
+    }
+
+    private class ClientListener implements PropertyChangeListener {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+
+        }
     }
 }

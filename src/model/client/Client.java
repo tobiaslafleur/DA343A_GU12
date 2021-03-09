@@ -4,6 +4,8 @@ import controller.Controller;
 import model.Message;
 import model.User;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -20,6 +22,7 @@ public class Client {
     private User user;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+    private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
     public Client(String ip, int port, User user, Controller controller) {
         this.ip = ip;
@@ -81,5 +84,8 @@ public class Client {
             exception.printStackTrace();
         }
 
+    }
+    public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+        listeners.addPropertyChangeListener(propertyChangeListener);
     }
 }
