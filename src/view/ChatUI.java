@@ -1,19 +1,10 @@
-package View;
-
-import Controller.Controller;
-import Model.Client.Client;
-import Model.Message.MessageListener;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.font.TextAttribute;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class ChatUI extends JFrame {
@@ -28,8 +19,6 @@ public class ChatUI extends JFrame {
     private JButton logOff;
     private JLabel label;
 
-
-
     public ChatUI() {
         createComponents();
     }
@@ -41,9 +30,6 @@ public class ChatUI extends JFrame {
         newFrame.setLocationRelativeTo(null);
         newFrame.setResizable(true);
         JPanel southPanel = new JPanel();
-
-
-
 
         newFrame.add(BorderLayout.SOUTH, southPanel);
         southPanel.setBackground(Color.BLUE);
@@ -61,9 +47,6 @@ public class ChatUI extends JFrame {
         newFrame.add(new JScrollPane(chatBox), BorderLayout.CENTER);
         newFrame.add(new JScrollPane(connectedList),BorderLayout.EAST);
 
-
-
-
         GridBagConstraints left = new GridBagConstraints();
         left.anchor = GridBagConstraints.WEST;
         GridBagConstraints right = new GridBagConstraints();
@@ -80,7 +63,6 @@ public class ChatUI extends JFrame {
 
     }
 
-
     class sendMessageButtonListener implements ActionListener {
 
         private String username = "Måns";
@@ -94,6 +76,4 @@ public class ChatUI extends JFrame {
             }
         }
     }
-
-
 }
