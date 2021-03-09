@@ -16,9 +16,11 @@ public class Server extends Thread{
     private List<User> userList;
     private List<ClientHandler> clientHandlers;
     private ArrayList<String> currentUsers;
+    private ServerLogger logger;
 
     public Server(int port) {
         try {
+            logger.log("Server started");
             serverSocket = new ServerSocket(port);
             rwf = new ReadWriteFile();
             userList = new ArrayList<>();
@@ -149,6 +151,8 @@ public class Server extends Thread{
 
         public void sendMessage(Message message) {
             //oos.flush();
+
+            //logger.log("message was sent to " + user.getUsername());
         }
 
         public void sendOnlineList(ArrayList<String> list) {
