@@ -16,11 +16,9 @@ public class Server extends Thread{
     private List<User> userList;
     private List<ClientHandler> clientHandlers;
     private ArrayList<String> currentUsers;
-    private ServerLogger logger;
 
     public Server(int port) {
         try {
-            logger.log("Server started");
             serverSocket = new ServerSocket(port);
             rwf = new ReadWriteFile();
             userList = new ArrayList<>();
@@ -54,6 +52,33 @@ public class Server extends Thread{
     public void updateOnlineUsers() {
         for(ClientHandler ch : clientHandlers) {
             ch.sendOnlineList(currentUsers);
+        }
+    }
+
+    public User findContact(String contact) {
+        for(ClientHandler ch : clientHandlers) {
+            if(ch.user.getUsername().equals(contact)) {
+                return ch.user;
+            }
+        }
+        return null;
+    }
+
+    public void removeHandler(ClientHandler clientHandler) {
+        clientHandlers.remove(clientHandler);
+    }
+
+    public void removeFromOnlineList(User user) {
+        currentUsers.remove(user.getUsername());
+    }
+
+    public void sendMessage(Message message) {
+        for(int i = 0; i < message.getReceivers().size(); i++) {
+            for(ClientHandler ch : clientHandlers) {
+                if(message.getReceivers().get(i) == ch.user) {
+                    ch.sendMessage(message);
+                }
+            }
         }
     }
 
@@ -112,6 +137,7 @@ public class Server extends Thread{
         private Socket socket;
         private Server server;
         private User user;
+        private boolean running = true;
 
         private ObjectInputStream ois;
         private ObjectOutputStream oos;
@@ -130,7 +156,7 @@ public class Server extends Thread{
 
         @Override
         public void run() {
-            while(true) {
+            while(running) {
                 try {
                     Object obj = ois.readObject();
 
@@ -140,6 +166,19 @@ public class Server extends Thread{
                     } else if(obj instanceof Message) {
                         Message message = (Message) obj;
                         message.setMessageReceived(LocalDateTime.now());
+                        server.sendMessage(message);
+                    } else if(obj instanceof String) {
+                        String string = (String) obj;
+                        if(string.equals("CLIENT_DISCONNECT")) {
+                            server.removeFromOnlineList(user);
+                            stopConnection();
+                            server.removeHandler(this);
+                            running = false;
+                        } else {
+                            User contact = server.findContact((String) obj);
+                            oos.writeObject(contact);
+                            oos.flush();
+                        }
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -149,17 +188,30 @@ public class Server extends Thread{
             }
         }
 
-        public void sendMessage(Message message) {
-            //oos.flush();
-
-            //logger.log("message was sent to " + user.getUsername());
+        public synchronized void sendMessage(Message message) {
+            try {
+                oos.writeObject(message);
+                oos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        public void sendOnlineList(ArrayList<String> list) {
+        public synchronized void sendOnlineList(ArrayList<String> list) {
             try {
                 oos.writeObject(list);
                 oos.flush();
                 oos.reset();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public synchronized void stopConnection() {
+            try {
+                ois.close();
+                oos.close();
+                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

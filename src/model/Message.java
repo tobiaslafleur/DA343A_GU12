@@ -30,6 +30,12 @@ public class Message implements Serializable {
         this.receivers = receivers;
     }
 
+    public Message(ImageIcon icon, User user, ArrayList<User> receivers) {
+        this.icon = icon;
+        this.user = user;
+        this.receivers = receivers;
+    }
+
     public String getText() {
         return text;
     }
