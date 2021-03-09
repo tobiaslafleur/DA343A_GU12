@@ -96,12 +96,12 @@ public class LoginPanel extends JPanel {
 
             if(!username.isEmpty() && icon != null) {
                 mainFrame.setUser(username, icon);
+                mainFrame.dispose();
             }
         }
     }
 
     private class BtnChooseFileListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             FileChooserFrame fcf = new FileChooserFrame(mainFrame);
