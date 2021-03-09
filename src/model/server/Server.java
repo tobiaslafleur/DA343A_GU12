@@ -1,7 +1,7 @@
 package model.server;
 
 import model.*;
-import model.client.Client;
+import model.server.serverGUI.ServerWindow;
 
 import java.io.*;
 import java.net.*;
@@ -20,6 +20,7 @@ public class Server extends Thread{
 
     public Server(int port) {
         try {
+            new ServerWindow(this);
             serverSocket = new ServerSocket(port);
             rwf = new ReadWriteFile();
             userList = new ArrayList<>();
@@ -56,6 +57,10 @@ public class Server extends Thread{
         }
     }
 
+
+    public void getLogs(Date dateStart, Date dateEnd) {
+
+    }
     public User findContact(String contact) {
         for(ClientHandler ch : clientHandlers) {
             if(ch.user.getUsername().equals(contact)) {
