@@ -42,8 +42,6 @@ public class Server {
                 try {
                     userList = rwf.getUsers();
 
-                    System.out.println(userList);
-
                     Socket socket = serverSocket.accept();
 
                     if(socket.isConnected()) {
@@ -57,13 +55,13 @@ public class Server {
                             clientHandlers.add(new ClientHandler(socket, (User) obj));
                             rwf.writeUser((User) obj);
                         } else if(obj instanceof Message) {
-                            for(ClientHandler ch : clientHandlers) {
-                                if(ch.socket == socket) {
-                                    
-
-                                    Message message = (Message) obj;
-                                    message.setMessageReceived(LocalDateTime.now());
-                                    ch.sendMessage((Message) obj);
+                            Message message = (Message) obj;
+                            message.setMessageReceived(LocalDateTime.now());
+                            for(int i = 0; i < message.getReceivers().size(); i++) {
+                                for(ClientHandler ch : clientHandlers) {
+                                    if(ch.user.getUsername().equals(message.getReceivers().get(i).getUsername())) {
+                                        ch.sendMessage(message);
+                                    }
                                 }
                             }
                         }

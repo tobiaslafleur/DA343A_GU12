@@ -19,8 +19,6 @@ public class ChatUI extends JFrame {
     private JButton logOff;
     private JLabel label;
 
-
-
     public ChatUI() {
         createComponents();
     }
@@ -32,9 +30,6 @@ public class ChatUI extends JFrame {
         newFrame.setLocationRelativeTo(null);
         newFrame.setResizable(true);
         JPanel southPanel = new JPanel();
-
-
-
 
         newFrame.add(BorderLayout.SOUTH, southPanel);
         southPanel.setBackground(Color.BLUE);
@@ -52,9 +47,6 @@ public class ChatUI extends JFrame {
         newFrame.add(new JScrollPane(chatBox), BorderLayout.CENTER);
         newFrame.add(new JScrollPane(connectedList),BorderLayout.EAST);
 
-
-
-
         GridBagConstraints left = new GridBagConstraints();
         left.anchor = GridBagConstraints.WEST;
         GridBagConstraints right = new GridBagConstraints();
@@ -71,7 +63,6 @@ public class ChatUI extends JFrame {
 
     }
 
-
     class sendMessageButtonListener implements ActionListener {
 
         private String username = "Måns";
@@ -85,6 +76,4 @@ public class ChatUI extends JFrame {
             }
         }
     }
-
-
 }

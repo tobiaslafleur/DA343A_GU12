@@ -34,13 +34,6 @@ public class Client {
         }
     }
 
-    public Socket getSocket() {
-        if(socket == null) {
-            return null;
-        }
-        return socket;
-    }
-
     private void startClient() {
         ClientThread clientThread = new ClientThread();
         clientThread.start();
@@ -64,21 +57,4 @@ public class Client {
         }
 
     }
-
-    private class Listener extends Thread {
-        public void run() {
-            String message;
-            try {
-                while (true) {
-                    message = ois.readUTF();
-                    //controller.newMessage
-                }
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
-        }
-    }
-
-
 }
