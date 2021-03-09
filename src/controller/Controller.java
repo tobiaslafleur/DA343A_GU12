@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
     private MainFrame view;
@@ -30,6 +31,30 @@ public class Controller {
 
     public void updateOnlineUsers(ArrayList<String> users) {
         view.updateOnlineUsers(users);
+    }
+
+    public void addContact(String selected) {
+        client.setNewContact(selected);
+    }
+
+    public void setContact(User contact) {
+        User clientUser = client.getUser();
+        clientUser.addContact(contact);
+    }
+
+    public void updateContactList() {
+        ArrayList<String> arrayList = new ArrayList<>();
+        List<User> contactList = client.getUser().getContacts();
+
+        for(int i = 0; i < contactList.size(); i++) {
+            arrayList.add(contactList.get(i).getUsername());
+        }
+
+        view.updateContactList(arrayList);
+    }
+
+    public void restartClient() {
+        client = null;
     }
 
     private class ClientListener implements PropertyChangeListener {

@@ -98,7 +98,6 @@ public class ServerPanel extends JPanel {
                java.util.Date dateStart = format.parse(txtStartDate.getText());
                java.util.Date dateEnd = format.parse(txtEndDate.getText());
                 server.getLogs(dateStart, dateEnd);
-                txtResults.setText;
            } catch (Exception exception) {
                exception.printStackTrace();
            }
