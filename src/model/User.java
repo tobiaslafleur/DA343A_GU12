@@ -12,9 +12,8 @@ public class User implements Serializable {
     private String username;
     private ImageIcon icon;
     private List<User> contacts;
-    private Socket socket;
 
-    public User(String username, ImageIcon icon, Socket socket) {
+    public User(String username, ImageIcon icon) {
         this.username = username;
         this.icon = icon;
         contacts = new ArrayList<>();
