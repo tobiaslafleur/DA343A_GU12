@@ -1,5 +1,6 @@
 package model.client;
 
+import model.Message;
 import model.User;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ public class Client {
     private Socket socket;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+    private ObjectInputStream ;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -46,4 +48,34 @@ public class Client {
             }
         }
     }
+
+    public void send(String message) {
+        try {
+            oos.writeObject(new Message());
+            oos.flush();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+
+
+
+    private class Listener extends Thread {
+        public void run() {
+            String message;
+            try {
+                while (true) {
+                    message = ois.readUTF();
+                    controller.newMessage
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+
+        }
+    }
+
+
 }
