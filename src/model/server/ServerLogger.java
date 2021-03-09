@@ -15,7 +15,6 @@ public class ServerLogger {
     public ServerLogger() {
         try {
             writer = new PrintWriter((fileName), "UTF-8");
-//            ui = new ServerUI;
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -39,7 +38,6 @@ public class ServerLogger {
         LogMessages logMessage = new LogMessages(message);
         logList.add(logMessage);
         saveToLogFile();
-//        ui.update()
     }
 
     private void saveToLogFile() {
