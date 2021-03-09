@@ -55,6 +55,7 @@ public class ChatUI extends JFrame {
 
         chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
         sendMessage.addActionListener(new sendMessageButtonListener());
+        logOff.addActionListener(new logOffListener());
 
         southPanel.add(inputBox, left);
         southPanel.add(sendMessage, right);
@@ -74,6 +75,13 @@ public class ChatUI extends JFrame {
                 chatBox.append("<" + username + ">:  " + inputBox.getText() + " " + " at:" + new Date() + "\n");
                 inputBox.setText("");
             }
+        }
+    }
+    private class logOffListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
         }
     }
 }
