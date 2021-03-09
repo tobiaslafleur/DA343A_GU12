@@ -1,7 +1,7 @@
 package model.server;
 
 import model.*;
-import model.client.Client;
+import model.server.serverGUI.ServerWindow;
 
 import java.io.*;
 import java.net.*;
@@ -16,9 +16,11 @@ public class Server extends Thread{
     private List<User> userList;
     private List<ClientHandler> clientHandlers;
     private ArrayList<String> currentUsers;
+    private ServerLogger logger;
 
     public Server(int port) {
         try {
+            new ServerWindow(this);
             serverSocket = new ServerSocket(port);
             rwf = new ReadWriteFile();
             userList = new ArrayList<>();
@@ -55,6 +57,10 @@ public class Server extends Thread{
         }
     }
 
+
+    public void getLogs(Date dateStart, Date dateEnd) {
+
+    }
     public User findContact(String contact) {
         for(ClientHandler ch : clientHandlers) {
             if(ch.user.getUsername().equals(contact)) {
@@ -176,6 +182,7 @@ public class Server extends Thread{
                         if(string.equals("CLIENT_DISCONNECT")) {
                             server.removeFromOnlineList(user);
                             stopConnection();
+
                             server.removeHandler(this);
                             server.updateOnlineUsers();
                             running = false;
@@ -195,6 +202,7 @@ public class Server extends Thread{
             try {
                 oos.writeObject(message);
                 oos.flush();
+                logger.log("Message sent to " + user.getUsername());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -212,6 +220,7 @@ public class Server extends Thread{
 
         public synchronized void stopConnection() {
             try {
+                logger.log(user.getUsername() + " disconnected");
                 ois.close();
                 oos.close();
                 socket.close();

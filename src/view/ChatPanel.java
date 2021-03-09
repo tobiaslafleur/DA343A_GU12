@@ -44,6 +44,7 @@ public class ChatPanel extends JPanel {
         txtMessageBox.setPreferredSize(new Dimension(550, 25));
         txtMessageBox.setMinimumSize(new Dimension(550, 25));
 
+
         dlmOnlineUsers = new DefaultListModel<>();
 
         listConnected = new JList(dlmOnlineUsers);
