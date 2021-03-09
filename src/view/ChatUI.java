@@ -1,19 +1,10 @@
-package View;
-
-import Controller.Controller;
-import Model.Client.Client;
-import Model.Message.MessageListener;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.font.TextAttribute;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class ChatUI extends JFrame {
@@ -35,7 +26,7 @@ public class ChatUI extends JFrame {
     }
 
     private void createComponents() {
-        newFrame.setSize(850,550);
+        newFrame.setSize(900,550);
         newFrame.setVisible(true);
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.setLocationRelativeTo(null);
