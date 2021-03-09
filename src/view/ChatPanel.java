@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ChatPanel extends JPanel {
@@ -15,6 +16,8 @@ public class ChatPanel extends JPanel {
 
     private JList listConnected;
     private JList listFriends;
+
+    private DefaultListModel<String> dlmOnlineUsers;
 
     private JButton btnSendMsg;
     private JButton btnLogOff;
@@ -39,7 +42,9 @@ public class ChatPanel extends JPanel {
         txtMessageBox.setPreferredSize(new Dimension(550, 25));
         txtMessageBox.setMinimumSize(new Dimension(550, 25));
 
-        listConnected = new JList();
+        dlmOnlineUsers = new DefaultListModel<>();
+
+        listConnected = new JList(dlmOnlineUsers);
         listConnected.setSize(new Dimension(175, 500));
         listConnected.setPreferredSize(new Dimension(175, 500));
         listConnected.setMinimumSize(new Dimension(175, 500));
@@ -102,6 +107,11 @@ public class ChatPanel extends JPanel {
     private void registerListeners() {
         btnSendMsg.addActionListener(new BtnSendMsgListener());
         btnLogOff.addActionListener(new BtnLogOffListener());
+    }
+
+    public void updateOnlineUsers(ArrayList<String> users) {
+        dlmOnlineUsers.clear();
+        dlmOnlineUsers.addAll(users);
     }
 
     class BtnSendMsgListener implements ActionListener {

@@ -1,5 +1,6 @@
 package model.client;
 
+import controller.Controller;
 import model.Message;
 import model.User;
 
@@ -7,8 +8,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client {
+    private Controller controller;
 
     private String ip;
     private int port;
@@ -17,10 +21,11 @@ public class Client {
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
 
-    public Client(String ip, int port, User user) {
+    public Client(String ip, int port, User user, Controller controller) {
         this.ip = ip;
         this.port = port;
         this.user = user;
+        this.controller = controller;
 
         try {
             socket = new Socket(ip, port);
@@ -38,8 +43,6 @@ public class Client {
 
     public void closeStreams() {
         try {
-
-
             oos.close();
             ois.close();
             socket.close();
@@ -57,14 +60,22 @@ public class Client {
         @Override
         public void run() {
             while(true) {
+                try {
+                    Object obj = ois.readObject();
 
+                    if(obj instanceof List) {
+                        controller.updateOnlineUsers((ArrayList<String>) obj);
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    public void send(String message) {
+    public void login() {
         try {
-            //oos.writeObject(new Message());
+            oos.writeObject(user);
             oos.flush();
         } catch (IOException exception) {
             exception.printStackTrace();
