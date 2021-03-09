@@ -18,9 +18,11 @@ public class ChatPanel extends JPanel {
     private JList listFriends;
 
     private DefaultListModel<String> dlmOnlineUsers;
+    private DefaultListModel<String> dlmContactList;
 
     private JButton btnSendMsg;
     private JButton btnLogOff;
+    private JButton btnAddContact;
 
     public ChatPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -50,7 +52,9 @@ public class ChatPanel extends JPanel {
         listConnected.setMinimumSize(new Dimension(175, 500));
         listConnected.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        listFriends = new JList();
+        dlmContactList = new DefaultListModel<>();
+
+        listFriends = new JList(dlmContactList);
         listFriends.setSize(new Dimension(175, 500));
         listFriends.setPreferredSize(new Dimension(175, 500));
         listFriends.setMinimumSize(new Dimension(175, 500));
@@ -61,10 +65,15 @@ public class ChatPanel extends JPanel {
         btnSendMsg.setPreferredSize(new Dimension(550, 100));
         btnSendMsg.setMinimumSize(new Dimension(550, 100));
 
+        btnAddContact = new JButton("Add Contact");
+        btnAddContact.setSize(new Dimension(175, 100));
+        btnAddContact.setPreferredSize(new Dimension(175, 100));
+        btnAddContact.setMinimumSize(new Dimension(175, 100));
+
         btnLogOff = new JButton("Log off");
-        btnLogOff.setSize(new Dimension(350, 100));
-        btnLogOff.setPreferredSize(new Dimension(350, 100));
-        btnLogOff.setMinimumSize(new Dimension(350, 100));
+        btnLogOff.setSize(new Dimension(175, 100));
+        btnLogOff.setPreferredSize(new Dimension(175, 100));
+        btnLogOff.setMinimumSize(new Dimension(175, 100));
     }
 
     private void initGui() {
@@ -100,18 +109,29 @@ public class ChatPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = 1;
+        add(btnAddContact, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
         add(btnLogOff, gbc);
     }
 
     private void registerListeners() {
         btnSendMsg.addActionListener(new BtnSendMsgListener());
         btnLogOff.addActionListener(new BtnLogOffListener());
+        btnAddContact.addActionListener(new BtnAddContact());
     }
 
     public void updateOnlineUsers(ArrayList<String> users) {
         dlmOnlineUsers.clear();
         dlmOnlineUsers.addAll(users);
+    }
+
+    public void updateContactList(ArrayList<String> arrayList) {
+        dlmContactList.clear();
+        dlmContactList.addAll(arrayList);
     }
 
     class BtnSendMsgListener implements ActionListener {
@@ -132,8 +152,17 @@ public class ChatPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            mainFrame.updateGuiToLogin();
             mainFrame.logOff();
+            mainFrame.updateGuiToLogin();
+        }
+    }
+
+    class BtnAddContact implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String selected = String.valueOf(listConnected.getSelectedValue());
+            mainFrame.addContact(selected);
         }
     }
 

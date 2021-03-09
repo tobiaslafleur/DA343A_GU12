@@ -16,6 +16,8 @@ import java.util.List;
 public class Client {
     private Controller controller;
 
+    private boolean running = true;
+
     private String ip;
     private int port;
     private Socket socket;
@@ -46,6 +48,11 @@ public class Client {
 
     public void closeStreams() {
         try {
+            oos.writeObject("CLIENT_DISCONNECT");
+            oos.flush();
+
+            running = false;
+
             oos.close();
             ois.close();
             socket.close();
@@ -62,7 +69,7 @@ public class Client {
     class ClientThread extends Thread {
         @Override
         public void run() {
-            while(true) {
+            while(running) {
                 try {
                     Object obj = ois.readObject();
 
@@ -70,6 +77,11 @@ public class Client {
                         ArrayList<String> list = (ArrayList<String>) obj;
                         System.out.println(list);
                         controller.updateOnlineUsers(list);
+                    } else if(obj instanceof User) {
+                        controller.setContact((User) obj);
+                        controller.updateContactList();
+                    } else if(obj instanceof Message) {
+                        
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -87,7 +99,19 @@ public class Client {
         }
 
     }
+
+    public void setNewContact(String selected) {
+        try {
+            oos.writeObject(selected);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
         listeners.addPropertyChangeListener(propertyChangeListener);
     }
+
+    public User getUser() { return this.user; }
 }
