@@ -147,11 +147,11 @@ public class Server extends Thread{
             }
         }
 
-        public void sendMessage(Message message) {
+        public synchronized void sendMessage(Message message) {
             //oos.flush();
         }
 
-        public void sendOnlineList(ArrayList<String> list) {
+        public synchronized void sendOnlineList(ArrayList<String> list) {
             try {
                 oos.writeObject(list);
                 oos.flush();
