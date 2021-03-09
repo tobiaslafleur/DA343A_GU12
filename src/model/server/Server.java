@@ -42,6 +42,8 @@ public class Server {
                 try {
                     userList = rwf.getUsers();
 
+                    System.out.println(userList);
+
                     Socket socket = serverSocket.accept();
 
                     if(socket.isConnected()) {

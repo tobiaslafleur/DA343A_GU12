@@ -1,5 +1,7 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,8 +20,10 @@ public class ChatUI extends JFrame {
     private JTextArea chatBox;
     private JButton logOff;
     private JLabel label;
+    private Controller controller;
 
-    public ChatUI() {
+    public ChatUI(Controller controller) {
+        this.controller = controller;
         createComponents();
     }
 
@@ -81,7 +85,8 @@ public class ChatUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            controller.logOff();
+            newFrame.dispose();
         }
     }
 }

@@ -13,12 +13,14 @@ public class Client {
     private String ip;
     private int port;
     private Socket socket;
+    private User user;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
 
-    public Client(String ip, int port) {
+    public Client(String ip, int port, User user) {
         this.ip = ip;
         this.port = port;
+        this.user = user;
 
         try {
             socket = new Socket(ip, port);
@@ -30,6 +32,18 @@ public class Client {
 
             startClient();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeStreams() {
+        try {
+
+
+            oos.close();
+            ois.close();
+            socket.close();
+        }catch(IOException e) {
             e.printStackTrace();
         }
     }
