@@ -16,6 +16,7 @@ public class Server extends Thread{
     private List<User> userList;
     private List<ClientHandler> clientHandlers;
     private ArrayList<String> currentUsers;
+    private ServerLogger logger;
 
     public Server(int port) {
         try {
@@ -172,6 +173,7 @@ public class Server extends Thread{
                         if(string.equals("CLIENT_DISCONNECT")) {
                             server.removeFromOnlineList(user);
                             stopConnection();
+
                             server.removeHandler(this);
                             running = false;
                         } else {
@@ -192,6 +194,7 @@ public class Server extends Thread{
             try {
                 oos.writeObject(message);
                 oos.flush();
+                logger.log("Message sent to " + user.getUsername());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -209,6 +212,7 @@ public class Server extends Thread{
 
         public synchronized void stopConnection() {
             try {
+                logger.log(user.getUsername() + " disconnected");
                 ois.close();
                 oos.close();
                 socket.close();
