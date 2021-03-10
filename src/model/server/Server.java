@@ -11,13 +11,13 @@ import java.util.*;
 public class Server extends Thread {
     private ServerSocket serverSocket;
     private ObjectInputStream ois;
-    ;
     private ObjectOutputStream oos;
     private ReadWriteFile rwf;
     private ArrayList<String> userList;
     private List<ClientHandler> clientHandlers;
     private ArrayList<String> currentUsers;
     private ServerLogger logger;
+    private UnsentMessage unsentMessage;
 
     public Server(int port) {
         try {
@@ -25,6 +25,7 @@ public class Server extends Thread {
             logger = new ServerLogger();
             serverSocket = new ServerSocket(port);
             rwf = new ReadWriteFile();
+            unsentMessage = new UnsentMessage();
             userList = new ArrayList<>();
             clientHandlers = new ArrayList<>();
             currentUsers = new ArrayList<>();
@@ -97,6 +98,29 @@ public class Server extends Thread {
                 }
                 if (message.getReceivers().get(i).equals(ch.user.getUsername())) {
                     ch.sendMessage(message);
+                    message.getReceivers().remove(message.getReceivers().get(i));
+                }
+            }
+        }
+
+        System.out.println(message.getReceivers().size());
+        if(message.getReceivers().size() > 0) {
+            for(int i = 0; i < message.getReceivers().size(); i++) {
+                unsentMessage.put(message.getReceivers().get(i), message);
+            }
+        }
+    }
+
+    public void checkUnsentMessages(String user) {
+        ArrayList<Message> messages = unsentMessage.get(user);
+
+        if(messages != null) {
+            System.out.println("entered NULL if statement");
+            for (ClientHandler ch : clientHandlers) {
+                if (user.equals(ch.user.getUsername())) {
+                    for (Message m : messages) {
+                        ch.sendMessage(m);
+                    }
                 }
             }
         }
@@ -132,16 +156,17 @@ public class Server extends Thread {
                     if (obj instanceof User) {
                         User tempUser = (User) obj;
                         if (!alreadyExistsInList(tempUser.getUsername())) {
-                            this.user = tempUser;
+                            user = tempUser;
                             rwf.writeUser(user);
                             rwf.addToTextFile(user.getUsername());
                         } else {
-                            this.user = rwf.readFromFile(tempUser.getUsername());
+                            user = rwf.readFromFile(tempUser.getUsername());
                             oos.writeObject(user);
                             oos.flush();
                         }
                         currentUsers.add(user.getUsername());
                         server.updateOnlineUsers();
+                        server.checkUnsentMessages(user.getUsername());
                     } else if (obj instanceof Message) {
                         logger.log("Server recived a message from" + user.getUsername());
                         Message message = (Message) obj;
@@ -203,24 +228,23 @@ public class Server extends Thread {
 
     private class UnsentMessage {
 
-        private HashMap<String, ArrayList<Message>> map = new HashMap<String, ArrayList<Message>>();
+        private HashMap<String, ArrayList<Message>> unsent = new HashMap<>();
 
-        public synchronized void put(User user, Message message) {
-            ArrayList<Message> UnsentMessageList = map.get(user.getUsername());
-            if (UnsentMessageList == null) {
-                UnsentMessageList = new ArrayList<Message>();
-                map.put(user.getUsername(), UnsentMessageList);
+        public synchronized void put(String user, Message message) {
+            ArrayList<Message> unsentMessageList = unsent.get(user);
+
+            if (unsentMessageList == null) {
+                unsentMessageList = new ArrayList<>();
+                unsent.put(user, unsentMessageList);
+                System.out.println("inside");
             }
-            UnsentMessageList.add(message);
+
+            System.out.println("outside");
+            unsentMessageList.add(message);
         }
 
-        public synchronized ArrayList<Message> get (User user) {
-            return map.get(user.getUsername());
+        public synchronized ArrayList<Message> get (String user) {
+            return unsent.get(user);
         }
-
-
-
     }
-
-
 }
