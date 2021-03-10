@@ -106,6 +106,7 @@ public class LoginPanel extends JPanel {
     }
 
     private class BtnChooseFileListener implements ActionListener {
+        
         @Override
         public void actionPerformed(ActionEvent e) {
             FileChooserFrame fcf = new FileChooserFrame(mainFrame);
