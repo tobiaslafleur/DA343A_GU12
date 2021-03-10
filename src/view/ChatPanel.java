@@ -186,15 +186,15 @@ public class ChatPanel extends JPanel {
 
         public void actionPerformed(ActionEvent event) {
             if (txtMessageBox.getText().length() < 1) {
-                // do nothing
+
             } else {
-                //txtAreaChatBox.append("<" + ">:  " + txtMessageBox.getText() + " " + " at:" + new Date() + "\n");
-                //txtMessageBox.setText("");
                 String text = txtMessageBox.getText();
                 ImageIcon icon = null;
 
-                ArrayList<String> arrayList = new ArrayList<>();
-                arrayList.add("tobias");
+                ArrayList<String> arrayList = (ArrayList<String>) listConnected.getSelectedValuesList();
+                ArrayList<String> arrayListContacts = (ArrayList<String>) listFriends.getSelectedValuesList();
+
+                arrayList.addAll(arrayListContacts);
 
                 mainFrame.createMessage(text, icon, arrayList);
             }
