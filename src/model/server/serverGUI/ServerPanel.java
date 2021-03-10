@@ -1,6 +1,7 @@
 package model.server.serverGUI;
 
 import model.server.Server;
+import model.server.ServerLogger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,8 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class ServerPanel extends JPanel {
     private JLabel lblStartDate;
@@ -17,9 +16,10 @@ public class ServerPanel extends JPanel {
     private JTextField txtStartDate;
     private JTextField txtEndDate;
     private JButton btnFilter;
-    private JTextArea txtResults;
+    private JList<String> txtResults;
     private JScrollPane scrollPane;
     private Server server;
+    private ServerLogger logger;
 
 
     public ServerPanel(Server server) {
@@ -37,17 +37,19 @@ public class ServerPanel extends JPanel {
         lblEndDate.setPreferredSize(new Dimension(250, 50));
 
         txtStartDate = new JTextField();
-//        txtStartDate.set
+        txtStartDate.setToolTipText("Exempel: YYYY-MM-DDT10:10:10");
+        txtStartDate.setText("YYYY-MM-DDT10:10:10");
         txtStartDate.setPreferredSize(new Dimension(250, 50));
 
         txtEndDate = new JTextField();
+        txtEndDate.setText("YYYY-MM-DDT10:10:10");
+        txtEndDate.setToolTipText("Exempel: YYYY-MM-DDT10:10:10");
         txtEndDate.setPreferredSize(new Dimension(250, 50));
 
         btnFilter = new JButton("Filter");
         btnFilter.setPreferredSize(new Dimension(250, 50));
 
-        txtResults = new JTextArea();
-        txtResults.setEditable(false);
+        txtResults = new JList<>();
         scrollPane = new JScrollPane(txtResults);
         scrollPane.setPreferredSize(new Dimension(400, 300));
     }
@@ -94,13 +96,14 @@ public class ServerPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-           try {
-               java.util.Date dateStart = format.parse(txtStartDate.getText());
-               java.util.Date dateEnd = format.parse(txtEndDate.getText());
-                server.getLogs(dateStart, dateEnd);
-           } catch (Exception exception) {
-               exception.printStackTrace();
-           }
+            try {
+                LocalDateTime dateStart = LocalDateTime.parse  (txtStartDate.getText());
+                LocalDateTime dateEnd = LocalDateTime.parse(txtEndDate.getText());
+
+                txtResults.setListData(ServerLogger.getLog(dateEnd,dateStart));
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
 
 
         }
