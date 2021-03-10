@@ -51,11 +51,10 @@ public class Client {
         try {
             oos.writeObject("CLIENT_DISCONNECT");
             oos.flush();
+            oos.close();
 
             running = false;
 
-            oos.close();
-            ois.close();
             socket.close();
         }catch(IOException e) {
             e.printStackTrace();
@@ -88,7 +87,7 @@ public class Client {
                         System.out.println(list);
                         controller.updateOnlineUsers(list);
                     } else if(obj instanceof User) {
-                        controller.setContact((User) obj);
+                        user = (User) obj;
                         controller.updateContactList();
                     } else if(obj instanceof Message) {
                         Message message = (Message) obj;

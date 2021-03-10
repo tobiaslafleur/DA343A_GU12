@@ -38,17 +38,12 @@ public class Controller {
         client.setNewContact(selected);
     }
 
-    public void setContact(User contact) {
-        User clientUser = client.getUser();
-        clientUser.addContact(contact);
-    }
-
     public void updateContactList() {
         ArrayList<String> arrayList = new ArrayList<>();
         List<User> contactList = client.getUser().getContacts();
 
-        for(int i = 0; i < contactList.size(); i++) {
-            arrayList.add(contactList.get(i).getUsername());
+        for (User user : contactList) {
+            arrayList.add(user.getUsername());
         }
 
         view.updateContactList(arrayList);
@@ -59,13 +54,32 @@ public class Controller {
     }
 
     public void createMessage(String text, ImageIcon icon, ArrayList<String> arrayList) {
-        Message message = new Message(text, icon, client.getUser(), arrayList) ;
+        ArrayList<String> tempArrayList = new ArrayList<>();
 
-        client.sendMessage(message);
+        for(String s : arrayList) {
+            if(!tempArrayList.contains(s)) {
+                tempArrayList.add(s);
+            }
+        }
+
+        arrayList = tempArrayList;
+
+        for(int i = 0; i < arrayList.size(); i++) {
+            if(arrayList.get(i).equals(client.getUser().getUsername())) {
+                arrayList.remove(i);
+                i = arrayList.size();
+            }
+        }
+
+        if(arrayList.size() >= 1) {
+            Message message = new Message(text, icon, client.getUser(), arrayList) ;
+
+            client.sendMessage(message);
+        }
     }
 
     public void showMessage(Message message) {
-        view.setMessageText(message.getText(), new ImageIcon("files/waving-from-a-boat.jpg"), message.getUser().getUsername(), message.getMessageReceivedString());
+        view.setMessageText(message.getText(), message.getIcon(), message.getUser().getUsername(), message.getMessageReceivedString());
     }
 
     private class ClientListener implements PropertyChangeListener {

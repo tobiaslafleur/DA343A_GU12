@@ -4,6 +4,8 @@ import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
@@ -19,12 +21,29 @@ public class MainFrame extends JFrame {
 
         initComponents();
         initGui();
+        addListeners();
+    }
+
+    private void addListeners() {
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to close this window?", "Close Window?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    controller.logOff();
+                    System.exit(0);
+                } else {
+                    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                }
+            }
+        });
     }
 
     private void initComponents(){
         setTitle("MSN 2.0");
         setSize(new Dimension(900,600));
-        setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(900,600));
         setVisible(true);
         setResizable(false);
@@ -101,5 +120,13 @@ public class MainFrame extends JFrame {
 
     public void setMessageText(String text, ImageIcon image, String user, String dateTime) {
         chatPanel.setMessageText(text, image, user, dateTime);
+    }
+
+    private class WindowListener extends WindowAdapter {
+        @Override
+        public void windowClosed(WindowEvent e) {
+            System.out.println("Closing");
+            System.exit(0);
+        }
     }
 }

@@ -13,7 +13,7 @@ public class Server extends Thread{
     private ObjectInputStream ois;;
     private ObjectOutputStream oos;
     private ReadWriteFile rwf;
-    private List<User> userList;
+    private ArrayList<String> userList;
     private List<ClientHandler> clientHandlers;
     private ArrayList<String> currentUsers;
     private ServerLogger logger;
@@ -71,6 +71,13 @@ public class Server extends Thread{
         return null;
     }
 
+    private boolean alreadyExistsInList(String user) {
+        if(rwf.alreadyExistsInList(user)) {
+            return true;
+        }
+        return false;
+    }
+
     public void removeHandler(ClientHandler clientHandler) {
         clientHandlers.remove(clientHandler);
     }
@@ -85,63 +92,15 @@ public class Server extends Thread{
                 if(message.getReceivers().get(i).equals(ch.user.getUsername())) {
                     ch.sendMessage(message);
                 }
-                if(message.getUser() == ch.user) {
-                    ch.sendMessage(message);
-                }
+            }
+        }
+
+        for(ClientHandler ch : clientHandlers) {
+            if(message.getUser() == ch.user) {
+                ch.sendMessage(message);
             }
         }
     }
-
-    /*class ServerThread {
-
-        public void run() {
-            while(true) {
-                try {
-                    //userList = rwf.getUsers();
-
-                    //System.out.println(userList);
-
-                    Socket socket = serverSocket.accept();
-
-                    if(socket.isConnected()) {
-                        System.out.println("connected");
-                        ois = new ObjectInputStream(socket.getInputStream());
-                        oos = new ObjectOutputStream(socket.getOutputStream());
-
-                        Object obj = ois.readObject();
-
-                        if(obj instanceof User) {
-                            if(!isUserOnline((User) obj)) {
-                                clientHandlers.add(new ClientHandler(socket, (User) obj));
-                                //rwf.writeUser((User) obj);
-                                currentUsers.add(((User) obj).getUsername());
-                            } else {
-                                System.out.println("User already online");
-                            }
-                        } else if(obj instanceof Message) {
-                            Message message = (Message) obj;
-                            message.setMessageReceived(LocalDateTime.now());
-                            for(int i = 0; i < message.getReceivers().size(); i++) {
-                                for(ClientHandler ch : clientHandlers) {
-                                    if(ch.user.getUsername().equals(message.getReceivers().get(i).getUsername())) {
-                                        ch.sendMessage(message);
-                                    }
-                                }
-                            }
-                        }
-
-                        for(ClientHandler ch : clientHandlers) {
-                            System.out.println(currentUsers);
-                            ch.sendOnlineList(currentUsers);
-                        }
-                    }
-
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }*/
 
     class ClientHandler extends Thread{
         private Socket socket;
@@ -171,7 +130,16 @@ public class Server extends Thread{
                     Object obj = ois.readObject();
 
                     if(obj instanceof User) {
-                        this.user = (User) obj;
+                        User tempUser = (User) obj;
+                        if(!alreadyExistsInList(tempUser.getUsername())) {
+                            this.user = tempUser;
+                            rwf.writeUser(user);
+                            rwf.addToTextFile(user.getUsername());
+                        } else {
+                            this.user = rwf.readFromFile(tempUser.getUsername());
+                            oos.writeObject(user);
+                            oos.flush();
+                        }
                         currentUsers.add(user.getUsername());
                         server.updateOnlineUsers();
                     } else if(obj instanceof Message) {
@@ -183,13 +151,15 @@ public class Server extends Thread{
                         if(string.equals("CLIENT_DISCONNECT")) {
                             System.out.println("client disconnecting");
                             server.removeFromOnlineList(user);
+                            server.updateOnlineUsers();
                             stopConnection();
                             running = false;
-                            server.updateOnlineUsers();
                             server.removeHandler(this);
                         } else {
                             User contact = server.findContact((String) obj);
-                            oos.writeObject(contact);
+                            user.addContact(contact);
+                            rwf.writeUser(user);
+                            oos.writeObject(user);
                             oos.flush();
                         }
                     }
@@ -222,8 +192,7 @@ public class Server extends Thread{
         public synchronized void stopConnection() {
             try {
                 //logger.log(user.getUsername() + " disconnected");
-                ois.close();
-                oos.close();
+
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
