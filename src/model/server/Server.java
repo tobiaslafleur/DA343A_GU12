@@ -89,15 +89,12 @@ public class Server extends Thread{
     public void sendMessage(Message message) {
         for(int i = 0; i < message.getReceivers().size(); i++) {
             for(ClientHandler ch : clientHandlers) {
+                if(message.getUser().getUsername().equals(ch.user.getUsername())) {
+                    ch.sendMessage(message);
+                }
                 if(message.getReceivers().get(i).equals(ch.user.getUsername())) {
                     ch.sendMessage(message);
                 }
-            }
-        }
-
-        for(ClientHandler ch : clientHandlers) {
-            if(message.getUser() == ch.user) {
-                ch.sendMessage(message);
             }
         }
     }
