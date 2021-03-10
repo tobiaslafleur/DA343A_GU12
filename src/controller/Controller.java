@@ -6,8 +6,6 @@ import model.client.Client;
 import view.MainFrame;
 
 import javax.swing.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,6 @@ public class Controller {
     public void setUser(String username, ImageIcon icon) {
         User user = new User(username, icon);
         client = new Client("83.249.103.28", 2345, user, this);
-        client.addPropertyChangeListener(new ClientListener());
         client.login();
     }
 
@@ -82,11 +79,4 @@ public class Controller {
         view.setMessageText(message.getText(), message.getIcon(), message.getUser().getUsername(), message.getMessageReceivedString());
     }
 
-    private class ClientListener implements PropertyChangeListener {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-
-        }
-    }
 }

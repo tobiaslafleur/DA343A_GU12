@@ -120,9 +120,5 @@ public class Client {
         }
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
-        listeners.addPropertyChangeListener(propertyChangeListener);
-    }
-
     public User getUser() { return this.user; }
 }
