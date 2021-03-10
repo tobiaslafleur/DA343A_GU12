@@ -181,12 +181,12 @@ public class Server extends Thread{
                     } else if(obj instanceof String) {
                         String string = (String) obj;
                         if(string.equals("CLIENT_DISCONNECT")) {
+                            System.out.println("client disconnecting");
                             server.removeFromOnlineList(user);
                             stopConnection();
-
-                            server.removeHandler(this);
-                            server.updateOnlineUsers();
                             running = false;
+                            server.updateOnlineUsers();
+                            server.removeHandler(this);
                         } else {
                             User contact = server.findContact((String) obj);
                             oos.writeObject(contact);
@@ -203,7 +203,7 @@ public class Server extends Thread{
             try {
                 oos.writeObject(message);
                 oos.flush();
-                logger.log("Message sent to " + user.getUsername());
+                //logger.log("Message sent to " + user.getUsername());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -221,7 +221,7 @@ public class Server extends Thread{
 
         public synchronized void stopConnection() {
             try {
-                logger.log(user.getUsername() + " disconnected");
+                //logger.log(user.getUsername() + " disconnected");
                 ois.close();
                 oos.close();
                 socket.close();

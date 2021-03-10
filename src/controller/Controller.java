@@ -65,7 +65,7 @@ public class Controller {
     }
 
     public void showMessage(Message message) {
-        view.setMessageText(message.getText());
+        view.setMessageText(message.getText(), new ImageIcon("files/waving-from-a-boat.jpg"), message.getUser().getUsername(), message.getMessageReceivedString());
     }
 
     private class ClientListener implements PropertyChangeListener {

@@ -1,18 +1,26 @@
 package view;
 
+import model.User;
+
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ChatPanel extends JPanel {
     private MainFrame mainFrame;
 
     private JTextField txtMessageBox;
-    private JTextArea txtAreaChatBox;
+    private JTextPane txtPaneChatBox;
+
+    private StyledDocument doc;
+
+    private JScrollPane scrollPane;
 
     private JList listConnected;
     private JList listFriends;
@@ -33,11 +41,15 @@ public class ChatPanel extends JPanel {
     }
 
     private void initComponents() {
-        txtAreaChatBox = new JTextArea();
-        txtAreaChatBox.setSize(new Dimension(550, 475));
-        txtAreaChatBox.setPreferredSize(new Dimension(550, 475));
-        txtAreaChatBox.setMinimumSize(new Dimension(550, 475));
-        txtAreaChatBox.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        txtPaneChatBox = new JTextPane();
+        doc = txtPaneChatBox.getStyledDocument();
+
+        scrollPane = new JScrollPane(txtPaneChatBox);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setSize(new Dimension(550, 475));
+        scrollPane.setPreferredSize(new Dimension(550, 475));
+        scrollPane.setMinimumSize(new Dimension(550, 475));
+        scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         txtMessageBox = new JTextField();
         txtMessageBox.setSize(new Dimension(550, 25));
@@ -87,7 +99,7 @@ public class ChatPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(txtAreaChatBox, gbc);
+        add(scrollPane, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -135,8 +147,39 @@ public class ChatPanel extends JPanel {
         dlmContactList.addAll(arrayList);
     }
 
-    public void setMessageText(String text) {
-        txtAreaChatBox.append(text + "\n");
+    public void setMessageText(String text, ImageIcon messageImage, String user, String dateTime) {
+        try {
+            ImageIcon imageIcon = null;
+            SimpleAttributeSet icon = null;
+
+            String message = String.format("%s - %s: ", dateTime,user);
+
+            SimpleAttributeSet right = new SimpleAttributeSet();
+            StyleConstants.setBold(right, true);
+
+            if(messageImage != null) {
+                Image image = messageImage.getImage();
+                Image newImg = image.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+                imageIcon = new ImageIcon(newImg);
+
+                icon = new SimpleAttributeSet();
+                StyleConstants.setIcon(icon, imageIcon);
+            }
+
+            if(text != null && messageImage != null) {
+                doc.insertString(doc.getLength(), message, right);
+                doc.insertString(doc.getLength(), text + "\n", null);
+                doc.insertString(doc.getLength(), "image \n", icon);
+            } else if(text != null) {
+                doc.insertString(doc.getLength(), message, right);
+                doc.insertString(doc.getLength(), text + "\n", null);
+            } else {
+                doc.insertString(doc.getLength(), user + ": ", right);
+                doc.insertString(doc.getLength(), "image \n", icon);
+            }
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
     }
 
     class BtnSendMsgListener implements ActionListener {
