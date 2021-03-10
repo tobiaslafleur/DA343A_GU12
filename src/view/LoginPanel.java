@@ -93,7 +93,6 @@ public class LoginPanel extends JPanel {
     }
 
     private class BtnLoginListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             String username = txtUsername.getText();
