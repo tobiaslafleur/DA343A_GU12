@@ -14,7 +14,7 @@ public class ReadWriteFile {
     private FileInputStream fis;
     private ObjectInputStream ois;
 
-    private String filePath = "files/userlist.txt";
+    private final String filePath = "files/userlist.txt";
 
     public ReadWriteFile() {
 

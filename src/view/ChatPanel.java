@@ -202,14 +202,15 @@ public class ChatPanel extends JPanel {
 
         public void actionPerformed(ActionEvent event) {
             String text = txtMessageBox.getText();
-            ArrayList<String> arrayList = null;
+            ArrayList<String> arrayList = new ArrayList<>();
 
             if(!listConnected.getSelectedValuesList().isEmpty()) {
                 arrayList = (ArrayList<String>) listConnected.getSelectedValuesList();
-                if(!listFriends.getSelectedValuesList().isEmpty()) {
-                    ArrayList<String> arrayListContacts = (ArrayList<String>) listFriends.getSelectedValuesList();
-                    arrayList.addAll(arrayListContacts);
-                }
+            }
+
+            if(!listFriends.getSelectedValuesList().isEmpty()) {
+                ArrayList<String> arrayListContacts = (ArrayList<String>) listFriends.getSelectedValuesList();
+                arrayList.addAll(arrayListContacts);
             }
 
             if(arrayList != null) {

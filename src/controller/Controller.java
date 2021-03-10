@@ -19,7 +19,7 @@ public class Controller {
 
     public void setUser(String username, ImageIcon icon) {
         User user = new User(username, icon);
-        client = new Client("83.249.103.28", 2345, user, this);
+        client = new Client("localhost", 2345, user, this);
         client.login();
     }
 

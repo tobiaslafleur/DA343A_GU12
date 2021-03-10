@@ -10,7 +10,7 @@ public class ServerLogger {
     private static ArrayList<LogMessages> logList = new ArrayList<LogMessages>();
     private final String fileName = "files/server_log.txt";
     private static PrintWriter writer;
-//    private ServerUI ui;
+
 
     public ServerLogger() {
         try {
@@ -21,16 +21,23 @@ public class ServerLogger {
     }
 
 
-    public static String getLog(LocalDateTime to, LocalDateTime from) {
-        String tempMessage = "";
-        for (LogMessages messages : logList) {
-            LocalDateTime messageDate = messages.getDateTime();
-            if ((messageDate.isAfter(from) || messageDate.isEqual(from)) && (messageDate.isBefore(to) || messageDate.isEqual(to))) {
-                tempMessage = "(" + messageDate + ")" + messages.getMessage() + "\n";
+    public static String[] getLog(LocalDateTime to, LocalDateTime from) {
+        ArrayList<String> logStrings = new ArrayList<>();
+        String returnMessage[];
 
+        for(LogMessages message : logList) {
+            LocalDateTime messageTime = message.getDateTime();
+            if ((messageTime.isAfter(from) || messageTime.equals(from)) && (messageTime.isBefore(to) || messageTime.equals(to))) {
+                logStrings.add(message.toString());
             }
         }
-        return tempMessage;
+
+        returnMessage = new String[logStrings.size()];
+        for (int i = 0; i < returnMessage.length; i++) {
+            returnMessage[i] = logStrings.get(i);
+        }
+
+        return returnMessage;
     }
 
     public void log(String message) {
@@ -41,9 +48,7 @@ public class ServerLogger {
     }
 
     private void saveToLogFile() {
-        for (LogMessages message : logList) {
-            writer.write(message.toString() + "\n");
-        }
+        writer.write(logList.get(logList.size()-1).toString() + "\n");
         writer.flush();
     }
 
