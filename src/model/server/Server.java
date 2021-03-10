@@ -91,6 +91,8 @@ public class Server extends Thread {
     }
 
     public void sendMessage(Message message) {
+        ArrayList<String> tempList = new ArrayList<>();
+
         for (int i = 0; i < message.getReceivers().size(); i++) {
             for (ClientHandler ch : clientHandlers) {
                 if (message.getUser().getUsername().equals(ch.user.getUsername())) {
@@ -98,12 +100,19 @@ public class Server extends Thread {
                 }
                 if (message.getReceivers().get(i).equals(ch.user.getUsername())) {
                     ch.sendMessage(message);
-                    message.getReceivers().remove(message.getReceivers().get(i));
+                    tempList.add(message.getReceivers().get(i));
                 }
             }
         }
 
-        System.out.println(message.getReceivers().size());
+        for(int i = 0; i < message.getReceivers().size(); i++) {
+            for (String s : tempList) {
+                if (s.equals(message.getReceivers().get(i))) {
+                    message.getReceivers().remove(s);
+                }
+            }
+        }
+
         if(message.getReceivers().size() > 0) {
             for(int i = 0; i < message.getReceivers().size(); i++) {
                 unsentMessage.put(message.getReceivers().get(i), message);
@@ -115,7 +124,6 @@ public class Server extends Thread {
         ArrayList<Message> messages = unsentMessage.get(user);
 
         if(messages != null) {
-            System.out.println("entered NULL if statement");
             for (ClientHandler ch : clientHandlers) {
                 if (user.equals(ch.user.getUsername())) {
                     for (Message m : messages) {
@@ -168,14 +176,13 @@ public class Server extends Thread {
                         server.updateOnlineUsers();
                         server.checkUnsentMessages(user.getUsername());
                     } else if (obj instanceof Message) {
-                        logger.log("Server recived a message from" + user.getUsername());
+                        logger.log("Server received a message from " + user.getUsername());
                         Message message = (Message) obj;
                         message.setMessageReceived(LocalDateTime.now());
                         server.sendMessage(message);
                     } else if (obj instanceof String) {
                         String string = (String) obj;
                         if (string.equals("CLIENT_DISCONNECT")) {
-                            System.out.println("client disconnecting");
                             server.removeFromOnlineList(user);
                             server.updateOnlineUsers();
                             stopConnection();
@@ -236,10 +243,8 @@ public class Server extends Thread {
             if (unsentMessageList == null) {
                 unsentMessageList = new ArrayList<>();
                 unsent.put(user, unsentMessageList);
-                System.out.println("inside");
             }
 
-            System.out.println("outside");
             unsentMessageList.add(message);
         }
 

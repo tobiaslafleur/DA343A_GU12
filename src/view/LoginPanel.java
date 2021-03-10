@@ -31,7 +31,7 @@ public class LoginPanel extends JPanel {
 
         lblChooseIcon = new JLabel("Choose icon:");
 
-        lblIcon = new JLabel("Icon goes here");
+        lblIcon = new JLabel();
         lblIcon.setPreferredSize(new Dimension(200, 200));
 
         btnLogIn = new JButton("Login");
@@ -82,15 +82,14 @@ public class LoginPanel extends JPanel {
 
     public void setImage(String filepath) {
         ImageIcon icon = new ImageIcon(filepath);
+
+        Image image = icon.getImage();
+        Image newImg = image.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(newImg);
+
         lblIcon.setIcon(icon);
         repaint();
         revalidate();
-    }
-
-    public void reset() {
-        lblIcon.setIcon(null);
-        lblIcon.setText("Icon goes here");
-        txtUsername.setText("");
     }
 
     private class BtnLoginListener implements ActionListener {
