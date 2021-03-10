@@ -4,7 +4,6 @@ import controller.Controller;
 import model.Message;
 import model.User;
 import model.server.ServerLogger;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
