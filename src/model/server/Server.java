@@ -8,6 +8,11 @@ import java.net.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Klassen Server är server sidan av projektet
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class Server extends Thread {
     private ServerSocket serverSocket;
     private ObjectInputStream ois;
@@ -19,6 +24,10 @@ public class Server extends Thread {
     private ServerLogger logger;
     private UnsentMessage unsentMessage;
 
+    /**
+     * Konstruktorn skapar serverSocketen som gör att klienterna kan koppla upp mot den, den instansierar även många av våra instansvariablar
+     * @param port Porten som servern lyssnar på
+     */
     public Server(int port) {
         try {
             new ServerWindow(this);
@@ -35,6 +44,9 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Server trådens run() metod, accepterar uppkopplingar mot servern och skapar nya ClientHandler objekt om uppkopplingen är OK
+     */
     @Override
     public void run() {
         ClientHandler clientHandler = null;
@@ -55,17 +67,30 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Uppdaterar listan av onlineUsers genom att skicka ut en ny lista till alla användare
+     */
     public void updateOnlineUsers() {
         for (ClientHandler ch : clientHandlers) {
             ch.sendOnlineList(currentUsers);
         }
     }
 
-
+    /**
+     *
+     * @param to
+     * @param from
+     * @return
+     */
     public static String[] getLog(LocalDateTime to, LocalDateTime from) {
         return ServerLogger.getLog(to, from);
     }
 
+    /**
+     * Traverserar igenom och finner User objektet med hjälp av en användares namn
+     * @param contact En string av den inkommande kontaktens namn
+     * @return returnerar en användare
+     */
     public User findContact(String contact) {
         for (ClientHandler ch : clientHandlers) {
             if (ch.user.getUsername().equals(contact)) {
@@ -75,6 +100,11 @@ public class Server extends Thread {
         return null;
     }
 
+    /**
+     * Kollar om användaren redan finns i listan och returnerar då antingen true eller false
+     * @param user användarens namn
+     * @return returnerar true eller false
+     */
     private boolean alreadyExistsInList(String user) {
         if (rwf.alreadyExistsInList(user)) {
             return true;
@@ -82,14 +112,27 @@ public class Server extends Thread {
         return false;
     }
 
+    /**
+     * Tar bort en ClientHandler instans
+     * @param clientHandler ClientHandler instansen som ska tas bort
+     */
     public void removeHandler(ClientHandler clientHandler) {
         clientHandlers.remove(clientHandler);
     }
 
+    /**
+     * Tar bort användares från listan av användare som är anslutna
+     * @param user Användaren som ska tas bort
+     */
     public void removeFromOnlineList(User user) {
         currentUsers.remove(user.getUsername());
     }
 
+    /**
+     * Traverserar igenom listan av mottagare som ska få meddelandena och skickar sedan ut de med rätt ClientHandler instans till användarna, är inte mottagaren
+     * uppkopplad läggs meddelandet till i en HashMap i UnsentMessage instansen
+     * @param message Meddelandet som ska skickas
+     */
     public void sendMessage(Message message) {
         ArrayList<String> tempList = new ArrayList<>();
 
@@ -120,6 +163,10 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Kollar om där finns några meddelanden sparade i HashMapen i UnsentMessage för användaren som kopplar upp, finns där meddelanden skickas de ut
+     * @param user Användaren som kopplar upp sigs namn
+     */
     public void checkUnsentMessages(String user) {
         ArrayList<Message> messages = unsentMessage.get(user);
 
@@ -134,6 +181,9 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * ClientHandler är varje Klients uppkoppling mot servern som körs på vars en tråd
+     */
     class ClientHandler extends Thread {
         private Socket socket;
         private Server server;
@@ -143,6 +193,11 @@ public class Server extends Thread {
         private ObjectInputStream ois;
         private ObjectOutputStream oos;
 
+        /**
+         * Konstruktorn för ClientHandler, öppnar strömmarna för både input och output
+         * @param socket socketen som klienten är uppkopplad med
+         * @param server Ett objekt av servern för att komma åt datan och metoder som finns där
+         */
         public ClientHandler(Socket socket, Server server) {
             this.socket = socket;
             this.server = server;
@@ -155,6 +210,9 @@ public class Server extends Thread {
             }
         }
 
+        /**
+         * Trådens run() metod, tar in object och beroende på vilket sorts objekt som kommer in via strömmen utförs en rad olika metoder
+         */
         @Override
         public void run() {
             while (running) {
@@ -202,6 +260,10 @@ public class Server extends Thread {
             }
         }
 
+        /**
+         * Skickar meddelandena via strömmen
+         * @param message Meddelandet som skickas
+         */
         public synchronized void sendMessage(Message message) {
             try {
                 oos.writeObject(message);
@@ -212,6 +274,10 @@ public class Server extends Thread {
             }
         }
 
+        /**
+         * Skickar ut listan av användare som är online via strömmen
+         * @param list Listan som skickas
+         */
         public synchronized void sendOnlineList(ArrayList<String> list) {
             try {
                 oos.writeObject(list);
@@ -222,21 +288,31 @@ public class Server extends Thread {
             }
         }
 
+        /**
+         * Stänger socketen när klienten avbryter uppkopplingen
+         */
         public synchronized void stopConnection() {
             try {
                 logger.log(user.getUsername() + " disconnected");
                 socket.close();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Klassen UnsentMessage håller reda på meddelanden som inte skickats för att mottagaren är offline
+     */
     private class UnsentMessage {
 
         private HashMap<String, ArrayList<Message>> unsent = new HashMap<>();
 
+        /**
+         * Stoppar in meddelanden i HashMapen med användarens namn som nyckel
+         * @param user Användarens namn
+         * @param message Meddelandet som inte kunde skickas
+         */
         public synchronized void put(String user, Message message) {
             ArrayList<Message> unsentMessageList = unsent.get(user);
 
@@ -248,6 +324,11 @@ public class Server extends Thread {
             unsentMessageList.add(message);
         }
 
+        /**
+         * Returnerar en lista av alla meddelande som den användare som kommer som invärde har
+         * @param user användarens namn
+         * @return returnerar en ArrayList
+         */
         public synchronized ArrayList<Message> get (String user) {
             return unsent.get(user);
         }
