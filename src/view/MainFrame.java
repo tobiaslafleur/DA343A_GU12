@@ -99,7 +99,7 @@ public class MainFrame extends JFrame {
         controller.createMessage(text, icon, arrayList);
     }
 
-    public void setMessageText(String text) {
-        chatPanel.setMessageText(text);
+    public void setMessageText(String text, ImageIcon image, String user, String dateTime) {
+        chatPanel.setMessageText(text, image, user, dateTime);
     }
 }
