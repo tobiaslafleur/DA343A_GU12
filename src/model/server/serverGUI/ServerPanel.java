@@ -10,6 +10,12 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
+/**
+  * @version 1.0
+  * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+  */
+
+
 public class ServerPanel extends JPanel {
     private JLabel lblStartDate;
     private JLabel lblEndDate;
