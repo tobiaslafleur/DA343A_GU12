@@ -7,13 +7,16 @@ import java.time.format.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class Message implements Serializable {
 
     private String text;
     private ImageIcon icon;
     private User user;
     private ArrayList<String> receivers;
-
     private LocalDateTime messageReceived;
     private LocalDateTime messageSent;
 

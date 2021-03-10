@@ -105,7 +105,7 @@ public class Server extends Thread {
             }
         }
 
-        for(int i = 0; i < message.getReceivers().size(); i++) {
+        for (int i = 0; i < message.getReceivers().size(); i++) {
             for (String s : tempList) {
                 if (s.equals(message.getReceivers().get(i))) {
                     message.getReceivers().remove(s);
@@ -113,8 +113,8 @@ public class Server extends Thread {
             }
         }
 
-        if(message.getReceivers().size() > 0) {
-            for(int i = 0; i < message.getReceivers().size(); i++) {
+        if (message.getReceivers().size() > 0) {
+            for (int i = 0; i < message.getReceivers().size(); i++) {
                 unsentMessage.put(message.getReceivers().get(i), message);
             }
         }
@@ -123,7 +123,7 @@ public class Server extends Thread {
     public void checkUnsentMessages(String user) {
         ArrayList<Message> messages = unsentMessage.get(user);
 
-        if(messages != null) {
+        if (messages != null) {
             for (ClientHandler ch : clientHandlers) {
                 if (user.equals(ch.user.getUsername())) {
                     for (Message m : messages) {
@@ -222,6 +222,7 @@ public class Server extends Thread {
             }
         }
 
+        // Stänger anslutnignen
         public synchronized void stopConnection() {
             try {
                 logger.log(user.getUsername() + " disconnected");
@@ -233,6 +234,7 @@ public class Server extends Thread {
         }
     }
 
+    // Innre klass som hanterar meddelanden som ej har kunnat levereats till användare
     private class UnsentMessage {
 
         private HashMap<String, ArrayList<Message>> unsent = new HashMap<>();
@@ -248,7 +250,7 @@ public class Server extends Thread {
             unsentMessageList.add(message);
         }
 
-        public synchronized ArrayList<Message> get (String user) {
+        public synchronized ArrayList<Message> get(String user) {
             return unsent.get(user);
         }
     }

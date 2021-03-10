@@ -6,6 +6,11 @@ import model.server.Server;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
+
 public class ServerWindow extends JFrame {
     private ServerPanel serverPanel;
     private Server server;

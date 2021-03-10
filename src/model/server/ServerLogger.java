@@ -5,10 +5,16 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class ServerLogger {
+
+/**
+ *
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
+public class ServerLogger{
 
     private static ArrayList<LogMessages> logList = new ArrayList<LogMessages>();
-    private final String fileName = "files/server_log.txt";
+    private String fileName = "files/server_log.txt";
     private static PrintWriter writer;
 
 
@@ -20,7 +26,12 @@ public class ServerLogger {
         }
     }
 
-
+    /**
+     *
+     * @param to Slutdatumet man vill sluta söka ifrån
+     * @param from Startdatumet man vill Börja söka ifrån
+     * @return retunerar meddelandet från loggfilen.
+     */
     public static String[] getLog(LocalDateTime to, LocalDateTime from) {
         ArrayList<String> logStrings = new ArrayList<>();
         String returnMessage[];
@@ -40,18 +51,22 @@ public class ServerLogger {
         return returnMessage;
     }
 
+    /**
+     *
+     * @param message Meddelandet som skall sparas ner till serverns loggfil.
+     */
     public void log(String message) {
-
         LogMessages logMessage = new LogMessages(message);
         logList.add(logMessage);
         saveToLogFile();
     }
 
+    /**
+     * Skriver ner till en loggfil som sparas lokalt på servern.
+     */
     private void saveToLogFile() {
         writer.write(logList.get(logList.size()-1).toString() + "\n");
         writer.flush();
     }
-
-
 }
 

@@ -6,20 +6,23 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+/**
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class ReadWriteFile {
     private OutputStreamWriter osw;
     private FileOutputStream fos;
     private ObjectOutputStream oos;
-
     private FileInputStream fis;
     private ObjectInputStream ois;
-
     private final String filePath = "files/userlist.txt";
 
     public ReadWriteFile() {
-
     }
 
+
+    // Skriver ner User Objekt och sparar dessa till en lokal fil på servern.
     public void writeUser(User user) {
         try {
             fos = new FileOutputStream("files/users/" + user.getUsername() + ".dat");
@@ -32,6 +35,8 @@ public class ReadWriteFile {
         }
     }
 
+
+    // Kontrollerar i userfilen för att kontrollera om användaren finns redan eller inte.
     public boolean alreadyExistsInList(String user) {
         try {
             fis = new FileInputStream(filePath);
@@ -39,7 +44,7 @@ public class ReadWriteFile {
 
             String line = null;
 
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 if (line.equals(user)) {
                     return true;
                 }
@@ -64,6 +69,7 @@ public class ReadWriteFile {
         }
     }
 
+    // Läser från listan av användare.
     public User readFromFile(String username) {
         try {
             fis = new FileInputStream("files/users/" + username + ".dat");

@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
-
+/**
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;

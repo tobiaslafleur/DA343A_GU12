@@ -9,6 +9,13 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ *
+ *
+ * @author Philip Persson, Måns Olsson, Tobias la Fleur, Alexandros Karakitsos, Satya Signh
+ * @version 1.0
+ */
 public class Controller {
     private MainFrame view;
     private Client client;
@@ -17,6 +24,11 @@ public class Controller {
         view = new MainFrame(this);
     }
 
+    /**
+     *
+     * @param username
+     * @param icon
+     */
     public void setUser(String username, ImageIcon icon) {
         User user = new User(username, icon);
         client = new Client("83.249.103.28", 2345, user, this);
