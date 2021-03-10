@@ -12,6 +12,7 @@ public class FileChooserFrame extends JFrame {
     public FileChooserFrame(MainFrame mainFrame){
         this.mainFrame = mainFrame;
         fileChooserPanel = new FileChooserPanel(this);
+        fileChooser = new JFileChooser();
         //initComponents();
         //initGui();
     }
@@ -43,5 +44,15 @@ public class FileChooserFrame extends JFrame {
 
     public void getIcon() {
         fileChooserPanel.getFile();
+    }
+
+    public ImageIcon getImage() {
+        ImageIcon image;
+        if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            String filepath = fileChooser.getSelectedFile().getPath();
+            image = new ImageIcon(filepath);
+            return image;
+        }
+        return null;
     }
 }

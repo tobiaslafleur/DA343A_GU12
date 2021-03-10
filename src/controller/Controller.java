@@ -27,7 +27,9 @@ public class Controller {
     }
 
     public void logOff() {
-        client.closeStreams();
+        if(client != null) {
+            client.closeStreams();
+        }
     }
 
     public void updateOnlineUsers(ArrayList<String> users) {

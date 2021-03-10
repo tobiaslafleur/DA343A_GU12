@@ -28,9 +28,12 @@ public class ChatPanel extends JPanel {
     private DefaultListModel<String> dlmOnlineUsers;
     private DefaultListModel<String> dlmContactList;
 
+    private ImageIcon image;
+
     private JButton btnSendMsg;
     private JButton btnLogOff;
     private JButton btnAddContact;
+    private JButton btnChooseImage;
 
     public ChatPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -74,9 +77,14 @@ public class ChatPanel extends JPanel {
         listFriends.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         btnSendMsg = new JButton("Send Message");
-        btnSendMsg.setSize(new Dimension(550, 100));
-        btnSendMsg.setPreferredSize(new Dimension(550, 100));
-        btnSendMsg.setMinimumSize(new Dimension(550, 100));
+        btnSendMsg.setSize(new Dimension(275, 100));
+        btnSendMsg.setPreferredSize(new Dimension(275, 100));
+        btnSendMsg.setMinimumSize(new Dimension(275, 100));
+
+        btnChooseImage = new JButton("Choose Image");
+        btnChooseImage.setSize(new Dimension(275, 100));
+        btnChooseImage.setPreferredSize(new Dimension(275, 100));
+        btnChooseImage.setMinimumSize(new Dimension(275, 100));
 
         btnAddContact = new JButton("Add Contact");
         btnAddContact.setSize(new Dimension(175, 100));
@@ -99,18 +107,21 @@ public class ChatPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 2;
         add(scrollPane, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.gridwidth = 2;
         add(txtMessageBox, gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.gridheight = 2;
+        gbc.gridwidth = 1;
         add(listConnected, gbc);
 
-        gbc.gridx = 2;
+        gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.gridheight = 2;
         add(listFriends, gbc);
@@ -122,10 +133,14 @@ public class ChatPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.gridy = 2;
+        add(btnChooseImage, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(btnAddContact, gbc);
 
-        gbc.gridx = 2;
+        gbc.gridx = 3;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(btnLogOff, gbc);
@@ -135,6 +150,7 @@ public class ChatPanel extends JPanel {
         btnSendMsg.addActionListener(new BtnSendMsgListener());
         btnLogOff.addActionListener(new BtnLogOffListener());
         btnAddContact.addActionListener(new BtnAddContact());
+        btnChooseImage.addActionListener(new BtnChooseImage());
     }
 
     public void updateOnlineUsers(ArrayList<String> users) {
@@ -185,19 +201,22 @@ public class ChatPanel extends JPanel {
     class BtnSendMsgListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-            if (txtMessageBox.getText().length() < 1) {
+            String text = txtMessageBox.getText();
+            ArrayList<String> arrayList = null;
 
-            } else {
-                String text = txtMessageBox.getText();
-                ImageIcon icon = null;
-
-                ArrayList<String> arrayList = (ArrayList<String>) listConnected.getSelectedValuesList();
-                ArrayList<String> arrayListContacts = (ArrayList<String>) listFriends.getSelectedValuesList();
-
-                arrayList.addAll(arrayListContacts);
-
-                mainFrame.createMessage(text, icon, arrayList);
+            if(!listConnected.getSelectedValuesList().isEmpty()) {
+                arrayList = (ArrayList<String>) listConnected.getSelectedValuesList();
+                if(!listFriends.getSelectedValuesList().isEmpty()) {
+                    ArrayList<String> arrayListContacts = (ArrayList<String>) listFriends.getSelectedValuesList();
+                    arrayList.addAll(arrayListContacts);
+                }
             }
+
+            if(arrayList != null) {
+                mainFrame.createMessage(text, image, arrayList);
+                image = null;
+            }
+
         }
     }
 
@@ -216,6 +235,14 @@ public class ChatPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             String selected = String.valueOf(listConnected.getSelectedValue());
             mainFrame.addContact(selected);
+        }
+    }
+
+    class BtnChooseImage implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            FileChooserFrame fcf = new FileChooserFrame(mainFrame);
+            image = fcf.getImage();
         }
     }
 
