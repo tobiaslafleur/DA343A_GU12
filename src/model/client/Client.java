@@ -3,6 +3,7 @@ package model.client;
 import controller.Controller;
 import model.Message;
 import model.User;
+import model.server.ServerLogger;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -22,6 +23,7 @@ public class Client {
     private String ip;
     private int port;
     private Socket socket;
+    private ServerLogger logger = new ServerLogger();
     private User user;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;

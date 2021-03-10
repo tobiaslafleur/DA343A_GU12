@@ -90,7 +90,7 @@ public class ServerPanel extends JPanel {
     }
 
     private class FilterListener implements ActionListener {
-        private StringBuilder stringBuilder;
+
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -100,7 +100,7 @@ public class ServerPanel extends JPanel {
                 LocalDateTime dateStart = LocalDateTime.parse  (txtStartDate.getText());
                 LocalDateTime dateEnd = LocalDateTime.parse(txtEndDate.getText());
 
-                txtResults.setListData(ServerLogger.getLog(dateEnd,dateStart));
+                txtResults.setListData(Server.getLog(dateEnd,dateStart));
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

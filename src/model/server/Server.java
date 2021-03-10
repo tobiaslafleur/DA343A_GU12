@@ -8,9 +8,10 @@ import java.net.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Server extends Thread{
+public class Server extends Thread {
     private ServerSocket serverSocket;
-    private ObjectInputStream ois;;
+    private ObjectInputStream ois;
+    ;
     private ObjectOutputStream oos;
     private ReadWriteFile rwf;
     private ArrayList<String> userList;
@@ -21,13 +22,14 @@ public class Server extends Thread{
     public Server(int port) {
         try {
             new ServerWindow(this);
+            logger = new ServerLogger();
             serverSocket = new ServerSocket(port);
             rwf = new ReadWriteFile();
             userList = new ArrayList<>();
             clientHandlers = new ArrayList<>();
             currentUsers = new ArrayList<>();
             start();
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -36,14 +38,15 @@ public class Server extends Thread{
     public void run() {
         ClientHandler clientHandler = null;
 
-        while(true) {
+        while (true) {
             try {
                 Socket socket = serverSocket.accept();
 
-                if(socket != null) {
+                if (socket != null) {
                     clientHandler = new ClientHandler(socket, this);
                     clientHandlers.add(clientHandler);
                     clientHandler.start();
+                    logger.log("A new client connected to server");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -52,19 +55,19 @@ public class Server extends Thread{
     }
 
     public void updateOnlineUsers() {
-        for(ClientHandler ch : clientHandlers) {
+        for (ClientHandler ch : clientHandlers) {
             ch.sendOnlineList(currentUsers);
         }
     }
 
 
-    public void getLogs(Date dateStart, Date dateEnd) {
-       
+    public static String[] getLog(LocalDateTime to, LocalDateTime from) {
+        return ServerLogger.getLog(to, from);
     }
 
     public User findContact(String contact) {
-        for(ClientHandler ch : clientHandlers) {
-            if(ch.user.getUsername().equals(contact)) {
+        for (ClientHandler ch : clientHandlers) {
+            if (ch.user.getUsername().equals(contact)) {
                 return ch.user;
             }
         }
@@ -72,7 +75,7 @@ public class Server extends Thread{
     }
 
     private boolean alreadyExistsInList(String user) {
-        if(rwf.alreadyExistsInList(user)) {
+        if (rwf.alreadyExistsInList(user)) {
             return true;
         }
         return false;
@@ -87,19 +90,19 @@ public class Server extends Thread{
     }
 
     public void sendMessage(Message message) {
-        for(int i = 0; i < message.getReceivers().size(); i++) {
-            for(ClientHandler ch : clientHandlers) {
-                if(message.getUser().getUsername().equals(ch.user.getUsername())) {
+        for (int i = 0; i < message.getReceivers().size(); i++) {
+            for (ClientHandler ch : clientHandlers) {
+                if (message.getUser().getUsername().equals(ch.user.getUsername())) {
                     ch.sendMessage(message);
                 }
-                if(message.getReceivers().get(i).equals(ch.user.getUsername())) {
+                if (message.getReceivers().get(i).equals(ch.user.getUsername())) {
                     ch.sendMessage(message);
                 }
             }
         }
     }
 
-    class ClientHandler extends Thread{
+    class ClientHandler extends Thread {
         private Socket socket;
         private Server server;
         private User user;
@@ -122,13 +125,13 @@ public class Server extends Thread{
 
         @Override
         public void run() {
-            while(running) {
+            while (running) {
                 try {
                     Object obj = ois.readObject();
 
-                    if(obj instanceof User) {
+                    if (obj instanceof User) {
                         User tempUser = (User) obj;
-                        if(!alreadyExistsInList(tempUser.getUsername())) {
+                        if (!alreadyExistsInList(tempUser.getUsername())) {
                             this.user = tempUser;
                             rwf.writeUser(user);
                             rwf.addToTextFile(user.getUsername());
@@ -139,13 +142,14 @@ public class Server extends Thread{
                         }
                         currentUsers.add(user.getUsername());
                         server.updateOnlineUsers();
-                    } else if(obj instanceof Message) {
+                    } else if (obj instanceof Message) {
+                        logger.log("Server recived a message from" + user.getUsername());
                         Message message = (Message) obj;
                         message.setMessageReceived(LocalDateTime.now());
                         server.sendMessage(message);
-                    } else if(obj instanceof String) {
+                    } else if (obj instanceof String) {
                         String string = (String) obj;
-                        if(string.equals("CLIENT_DISCONNECT")) {
+                        if (string.equals("CLIENT_DISCONNECT")) {
                             System.out.println("client disconnecting");
                             server.removeFromOnlineList(user);
                             server.updateOnlineUsers();
@@ -170,7 +174,7 @@ public class Server extends Thread{
             try {
                 oos.writeObject(message);
                 oos.flush();
-                //logger.log("Message sent to " + user.getUsername());
+                logger.log("Message sent to " + user.getUsername());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -188,12 +192,35 @@ public class Server extends Thread{
 
         public synchronized void stopConnection() {
             try {
-                //logger.log(user.getUsername() + " disconnected");
-
+                logger.log(user.getUsername() + " disconnected");
                 socket.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    private class UnsentMessage {
+
+        private HashMap<String, ArrayList<Message>> map = new HashMap<String, ArrayList<Message>>();
+
+        public synchronized void put(User user, Message message) {
+            ArrayList<Message> UnsentMessageList = map.get(user.getUsername());
+            if (UnsentMessageList == null) {
+                UnsentMessageList = new ArrayList<Message>();
+                map.put(user.getUsername(), UnsentMessageList);
+            }
+            UnsentMessageList.add(message);
+        }
+
+        public synchronized ArrayList<Message> get (User user) {
+            return map.get(user.getUsername());
+        }
+
+
+
+    }
+
+
 }
