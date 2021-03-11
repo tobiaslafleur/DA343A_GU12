@@ -148,7 +148,7 @@ public class Server extends Thread {
             }
         }
 
-        for(int i = 0; i < message.getReceivers().size(); i++) {
+        for (int i = 0; i < message.getReceivers().size(); i++) {
             for (String s : tempList) {
                 if (s.equals(message.getReceivers().get(i))) {
                     message.getReceivers().remove(s);
@@ -156,8 +156,8 @@ public class Server extends Thread {
             }
         }
 
-        if(message.getReceivers().size() > 0) {
-            for(int i = 0; i < message.getReceivers().size(); i++) {
+        if (message.getReceivers().size() > 0) {
+            for (int i = 0; i < message.getReceivers().size(); i++) {
                 unsentMessage.put(message.getReceivers().get(i), message);
             }
         }
@@ -170,7 +170,7 @@ public class Server extends Thread {
     public void checkUnsentMessages(String user) {
         ArrayList<Message> messages = unsentMessage.get(user);
 
-        if(messages != null) {
+        if (messages != null) {
             for (ClientHandler ch : clientHandlers) {
                 if (user.equals(ch.user.getUsername())) {
                     for (Message m : messages) {
@@ -288,6 +288,7 @@ public class Server extends Thread {
             }
         }
 
+
         /**
          * Stänger socketen när klienten avbryter uppkopplingen
          */
@@ -300,6 +301,7 @@ public class Server extends Thread {
             }
         }
     }
+
 
     /**
      * Klassen UnsentMessage håller reda på meddelanden som inte skickats för att mottagaren är offline
@@ -324,12 +326,14 @@ public class Server extends Thread {
             unsentMessageList.add(message);
         }
 
+
         /**
          * Returnerar en lista av alla meddelande som den användare som kommer som invärde har
          * @param user användarens namn
          * @return returnerar en ArrayList
          */
         public synchronized ArrayList<Message> get (String user) {
+
             return unsent.get(user);
         }
     }
