@@ -9,7 +9,6 @@ import java.awt.*;
  * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
  */
 public class FileChooserFrame extends JFrame {
-
     private FileChooserPanel fileChooserPanel;
     private JFileChooser fileChooser;
     private MainFrame mainFrame;
