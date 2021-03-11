@@ -12,6 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Klassen ChatPanel är den panel som används för att ta emot och skicka chatt-meddelanden.
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class ChatPanel extends JPanel {
     private MainFrame mainFrame;
 
@@ -35,6 +40,10 @@ public class ChatPanel extends JPanel {
     private JButton btnAddContact;
     private JButton btnChooseImage;
 
+    /**
+     * Instansierar ett MainFrame-objekt och kör de metoder angivina i konstruktorn.
+     * @param mainFrame MainFrame
+     */
     public ChatPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 
@@ -43,6 +52,9 @@ public class ChatPanel extends JPanel {
         registerListeners();
     }
 
+    /**
+     * Initialiserar alla GUI-objekt.
+     */
     private void initComponents() {
         txtPaneChatBox = new JTextPane();
         doc = txtPaneChatBox.getStyledDocument();
@@ -97,6 +109,9 @@ public class ChatPanel extends JPanel {
         btnLogOff.setMinimumSize(new Dimension(175, 100));
     }
 
+    /**
+     * Initialiserar och sätter upp GUI:t
+     */
     private void initGui() {
         setLayout(new GridBagLayout());
         setSize(new Dimension(900, 600));
@@ -146,6 +161,9 @@ public class ChatPanel extends JPanel {
         add(btnLogOff, gbc);
     }
 
+    /**
+     * Registerar lyssnare till alla knappar.
+     */
     private void registerListeners() {
         btnSendMsg.addActionListener(new BtnSendMsgListener());
         btnLogOff.addActionListener(new BtnLogOffListener());
@@ -153,16 +171,31 @@ public class ChatPanel extends JPanel {
         btnChooseImage.addActionListener(new BtnChooseImage());
     }
 
+    /**
+     * Uppdaterar de användare som loggar in och loggar ut från servern.
+     * @param users alla användare som är online
+     */
     public void updateOnlineUsers(ArrayList<String> users) {
         dlmOnlineUsers.clear();
         dlmOnlineUsers.addAll(users);
     }
 
+    /**
+     * Uppdaterar de användare som läggs till i kontaktlistan.
+     * @param arrayList alla kontakter användaren har
+     */
     public void updateContactList(ArrayList<String> arrayList) {
         dlmContactList.clear();
         dlmContactList.addAll(arrayList);
     }
 
+    /**
+     * Visar upp det inkomna meddelandet.
+     * @param text inkomna textmeddelandet
+     * @param messageImage inkomna bilden
+     * @param user inkomna användaren som skickat meddelandet
+     * @param dateTime tiden då meddelandet mottogs av klienten
+     */
     public void setMessageText(String text, ImageIcon messageImage, String user, String dateTime) {
         try {
             ImageIcon imageIcon = null;
@@ -198,8 +231,16 @@ public class ChatPanel extends JPanel {
         }
     }
 
+    /**
+     * BtnSendMsgListener implementerar ActionListener och läggs sedan till i registerListeners()
+     */
     class BtnSendMsgListener implements ActionListener {
 
+        /**
+         * Skickar med textmeddelandet man skrivit och bilden man har valt. Om text eller bild inte är angett så skickas de som null.
+         * @param event event
+         */
+        @Override
         public void actionPerformed(ActionEvent event) {
             String text = txtMessageBox.getText();
             ArrayList<String> arrayList = new ArrayList<>();
@@ -221,8 +262,15 @@ public class ChatPanel extends JPanel {
         }
     }
 
+    /**
+     * BtnLogOffListener implementerar ActionListener och läggs sedan till i registerListeners()
+     */
     class BtnLogOffListener implements ActionListener {
 
+        /**
+         * Kallar på metoder i mainFrame som stänger ner anslutning till server och uppdaterar GUI:t till LoginPanel
+         * @param e event
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             mainFrame.logOff();
@@ -230,8 +278,15 @@ public class ChatPanel extends JPanel {
         }
     }
 
+    /**
+     * BtnAddContact implementerar ActionListener och läggs sedan till i registerListeners()
+     */
     class BtnAddContact implements ActionListener {
 
+        /**
+         * Tar in vilken sträng som är vald från listConnected och skickas till mainFrame för att läggas till som kontakt i User-objektet.
+         * @param e event
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             String selected = String.valueOf(listConnected.getSelectedValue());
@@ -239,12 +294,19 @@ public class ChatPanel extends JPanel {
         }
     }
 
+    /**
+     * BtnChooseImage implementerar ActionListener och läggs sedan till i registerListeners()
+     */
     class BtnChooseImage implements ActionListener {
+
+        /**
+         * Väljer vilken bild som ska sparas till image från en JFileChooser.
+         * @param e event
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             FileChooserFrame fcf = new FileChooserFrame(mainFrame);
             image = fcf.getImage();
         }
     }
-
 }

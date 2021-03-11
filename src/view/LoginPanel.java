@@ -5,6 +5,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Klassen LoginPanel är den panel som används för att ta logga in till systemet.
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class LoginPanel extends JPanel {
 
     private MainFrame mainFrame;
@@ -16,6 +21,10 @@ public class LoginPanel extends JPanel {
     private JButton btnLogIn;
     private JButton btnChooseFile;
 
+    /**
+     * Initialiserar ett MainFrame-objekt och kör de metoder angivna i konstruktorn
+     * @param mainFrame MainFrame
+     */
     public LoginPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         initializeComponents();
@@ -23,6 +32,9 @@ public class LoginPanel extends JPanel {
         registerListeners();
     }
 
+    /**
+     * Initialiserar komponenter
+     */
     private void initializeComponents() {
         lblUsername = new JLabel("Username:");
 
@@ -40,6 +52,9 @@ public class LoginPanel extends JPanel {
 
     }
 
+    /**
+     * Initialiserar GUI:t.
+     */
     private void initializeGUI() {
         setLayout(new GridBagLayout());
         setPreferredSize(new Dimension(900, 600));
@@ -75,11 +90,18 @@ public class LoginPanel extends JPanel {
         add(btnLogIn, gbc);
     }
 
+    /**
+     * Registerar lyssnare på knapparna.
+     */
     private void registerListeners() {
         btnChooseFile.addActionListener(new BtnChooseFileListener());
         btnLogIn.addActionListener(new BtnLoginListener());
     }
 
+    /**
+     * Sätter bilden och visar upp den i GUI:t
+     * @param filepath filvägen till bilden som användaren valt.
+     */
     public void setImage(String filepath) {
         ImageIcon icon = new ImageIcon(filepath);
 
@@ -92,7 +114,15 @@ public class LoginPanel extends JPanel {
         revalidate();
     }
 
+    /**
+     * Klassen BtnLoginListener implementerar ActionListener som sedan läggs till i registerListeners()
+     */
     private class BtnLoginListener implements ActionListener {
+
+        /**
+         * Tar in användarnamnet samt vald bild och startar kedjan för att logga in.
+         * @param e event
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             String username = txtUsername.getText();
@@ -105,8 +135,15 @@ public class LoginPanel extends JPanel {
         }
     }
 
+    /**
+     * Klassen BtnFileChooser implementerar ActionListener som sedan läggs till i registerListeners()
+     */
     private class BtnChooseFileListener implements ActionListener {
 
+        /**
+         * Initialiserar en ny FileChooserFrame och kallar på funktionen för att få välja användarbild.
+         * @param e event
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             FileChooserFrame fcf = new FileChooserFrame(mainFrame);

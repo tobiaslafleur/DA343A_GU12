@@ -5,8 +5,12 @@ import java.io.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Klassen Message är de meddelanden som skickas på servern
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class Message implements Serializable {
 
     private String text;
@@ -17,6 +21,13 @@ public class Message implements Serializable {
     private LocalDateTime messageReceived;
     private LocalDateTime messageSent;
 
+    /**
+     * Denna konstruktorn används när ett meddelande har både text och en bild
+     * @param text Texten som skrivs
+     * @param icon Bilden som skickas med
+     * @param user Användaren som skickar
+     * @param receivers En lista med de mottagare som ska ta emot meddelandet
+     */
     public Message(String text, ImageIcon icon, User user, ArrayList<String> receivers) {
         this.text = text;
         this.icon = icon;
@@ -24,12 +35,24 @@ public class Message implements Serializable {
         this.receivers = receivers;
     }
 
+    /**
+     * Denna konstruktorn används när ett meddelande har bara text
+     * @param text Texten som skrivs
+     * @param user Användaren som skickar
+     * @param receivers En lista med de mottagare som ska ta emot meddelandet
+     */
     public Message(String text, User user, ArrayList<String> receivers) {
         this.text = text;
         this.user = user;
         this.receivers = receivers;
     }
 
+    /**
+     * Denna konstruktorn används när ett meddelande har bara en bild
+     * @param icon Bilden som skickas med
+     * @param user Användaren som skickar
+     * @param receivers En lista med de mottagare som ska ta emot meddelandet
+     */
     public Message(ImageIcon icon, User user, ArrayList<String> receivers) {
         this.icon = icon;
         this.user = user;

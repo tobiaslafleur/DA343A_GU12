@@ -1,19 +1,32 @@
 package model.server.serverGUI;
 
-import controller.Controller;
 import model.server.Server;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * klassen ServerWindow är huvudfönstret för server GUI:t och innehåller ServerPanelen
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
+
 public class ServerWindow extends JFrame {
     private ServerPanel serverPanel;
     private Server server;
+
+    /**
+     * konstruktorn instansierar Server objektet och anropar metoderna för att starta GUI:t
+     */
     public ServerWindow(Server server) {
         this.server = server;
         initComponents();
         initGUI();
     }
+
+    /**
+     * metod som initierar GUI:t och instansierar serverPanel
+     */
     private void initComponents() {
         setTitle("ServerGUI");
         setPreferredSize(new Dimension(600,700));
@@ -25,6 +38,11 @@ public class ServerWindow extends JFrame {
 
         serverPanel = new ServerPanel(server);
     }
+
+    /**
+     * metoden bestämmer layout på Server GUI:t och lägger till serverPanelen
+     * i ServerWindow
+     */
     private void initGUI() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

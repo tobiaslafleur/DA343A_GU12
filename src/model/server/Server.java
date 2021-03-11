@@ -77,10 +77,10 @@ public class Server extends Thread {
     }
 
     /**
-     *
-     * @param to
-     * @param from
-     * @return
+     * Returnerar en String array mellan de två inmatade tidpunkterna
+     * @param to Tiden till
+     * @param from Tiden ifrån
+     * @return returnerar en String array
      */
     public static String[] getLog(LocalDateTime to, LocalDateTime from) {
         return ServerLogger.getLog(to, from);

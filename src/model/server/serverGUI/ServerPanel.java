@@ -10,6 +10,12 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
+
+/**
+ * Klassen ServerPanel bygger upp och initierar GUI för Servern
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class ServerPanel extends JPanel {
     private JLabel lblStartDate;
     private JLabel lblEndDate;
@@ -21,6 +27,10 @@ public class ServerPanel extends JPanel {
     private Server server;
     private ServerLogger logger;
 
+    /**
+     * Konstruerar GUIt för serversidan
+     * @param server server-objekt
+     */
 
     public ServerPanel(Server server) {
         this.server = server;
@@ -29,6 +39,9 @@ public class ServerPanel extends JPanel {
         registerListeners();
     }
 
+    /**
+     * initComponents initierar kompontenter till GUIt och ger dem namn
+     */
     private void initComponents() {
         lblStartDate = new JLabel("Start Date");
         lblStartDate.setPreferredSize(new Dimension(250, 50));
@@ -53,6 +66,10 @@ public class ServerPanel extends JPanel {
         scrollPane = new JScrollPane(txtResults);
         scrollPane.setPreferredSize(new Dimension(400, 300));
     }
+
+    /**
+     * Sätter storlek och layout av GUIt
+     */
     private void initGUI() {
         setPreferredSize(new Dimension(580,680));
         setMaximumSize(new Dimension(580,680));
@@ -85,13 +102,23 @@ public class ServerPanel extends JPanel {
         gbc.gridy = 3;
         add(scrollPane, gbc);
     }
+
+    /**
+     * Lägger till listener till knappen "filter"
+     */
     private void registerListeners() {
         btnFilter.addActionListener(new FilterListener());
     }
 
+    /**
+     * FilterListener håller koll på användarens input
+     */
     private class FilterListener implements ActionListener {
 
-
+        /**
+         * Hämtar användarens input när knappen "filter" trycks ner
+         * @param e eventet som lyssnaren catchar
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
 

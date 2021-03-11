@@ -2,9 +2,13 @@ package model;
 
 import javax.swing.*;
 import java.io.*;
-import java.net.Socket;
 import java.util.*;
 
+/**
+ * Klassen User är de användar objekt som används för att spara en användares namn och bild samt kontakter
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -13,6 +17,11 @@ public class User implements Serializable {
     private ImageIcon icon;
     private List<User> contacts;
 
+    /**
+     * Konstruktorn som skapar ett User objekt
+     * @param username användarens namn
+     * @param icon användarens bild
+     */
     public User(String username, ImageIcon icon) {
         this.username = username;
         this.icon = icon;

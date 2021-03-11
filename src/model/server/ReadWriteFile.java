@@ -3,9 +3,12 @@ package model.server;
 import model.User;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
 
+/**
+ * Klassen ReadWriteFile används för att läsa och skriva till filer
+ * @version 1.0
+ * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
+ */
 public class ReadWriteFile {
     private OutputStreamWriter osw;
     private FileOutputStream fos;
@@ -16,10 +19,10 @@ public class ReadWriteFile {
 
     private final String filePath = "files/userlist.txt";
 
-    public ReadWriteFile() {
-
-    }
-
+    /**
+     * Skapar en fil om den inte redan finns och skriver sen in User objektet i filen
+     * @param user User objektet
+     */
     public void writeUser(User user) {
         try {
             fos = new FileOutputStream("files/users/" + user.getUsername() + ".dat");
@@ -32,6 +35,11 @@ public class ReadWriteFile {
         }
     }
 
+    /**
+     * Kollar om användaren redan finns och har en sparad fil, detta sparas isånnafall i userlist.txt och det är den filen som körs igenom här för att kolla om användaren redan finns
+     * @param user Användar stringen
+     * @return Returnerar false eller true
+     */
     public boolean alreadyExistsInList(String user) {
         try {
             fis = new FileInputStream(filePath);
@@ -51,6 +59,10 @@ public class ReadWriteFile {
         return false;
     }
 
+    /**
+     * Skriver in en användares namn i userlist.txt filen
+     * @param user Användar stringen
+     */
     public void addToTextFile(String user) {
         try {
             File file = new File(filePath);
@@ -64,6 +76,11 @@ public class ReadWriteFile {
         }
     }
 
+    /**
+     * Läsert ett User objekt från filen med namnet som kommer som invärde
+     * @param username användarens namn
+     * @return Returnerar användar objektet som finns i filen
+     */
     public User readFromFile(String username) {
         try {
             fis = new FileInputStream("files/users/" + username + ".dat");
