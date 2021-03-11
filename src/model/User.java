@@ -5,17 +5,22 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 /**
+ * Klassen User är själva användarna som senare används.
  * @version 1.0
  * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
  */
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     private String username;
     private ImageIcon icon;
     private List<User> contacts;
 
+    /**
+     * Konstruktorn som skapar en en ny Lista för att hålla reda på en användares kontakter.
+     * @param username Sätter användarnamnet på aktuella användaren
+     * @param icon Sätter bilden till den nuvarande användaren
+     */
     public User(String username, ImageIcon icon) {
         this.username = username;
         this.icon = icon;

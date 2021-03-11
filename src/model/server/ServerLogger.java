@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 
 /**
- *
+ * Klassen ServerLogger hanterar LogMessage objekt som sparas och skrivs till en lokalfil på servern.
  * @version 1.0
  * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
  */
@@ -27,7 +27,7 @@ public class ServerLogger{
     }
 
     /**
-     *
+     * Går igenom loggfilen och retunerar texten inom intervallet som användaren anger.
      * @param to Slutdatumet man vill sluta söka ifrån
      * @param from Startdatumet man vill Börja söka ifrån
      * @return retunerar meddelandet från loggfilen.
@@ -52,7 +52,7 @@ public class ServerLogger{
     }
 
     /**
-     *
+     * Sparar ner Message objekt och kallar sennare på metoden för att spara hela listen till en lokal logfil på servern.
      * @param message Meddelandet som skall sparas ner till serverns loggfil.
      */
     public void log(String message) {
@@ -62,6 +62,7 @@ public class ServerLogger{
     }
 
     /**
+     *
      * Skriver ner till en loggfil som sparas lokalt på servern.
      */
     private void saveToLogFile() {

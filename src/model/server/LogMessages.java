@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 
 /**
- *
+ * Klassen LogMessages skapar objekt av text och den tid
  * @version 1.0
  * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
  */

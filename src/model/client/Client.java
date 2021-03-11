@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * @author Philip Persson, Måns Olsson, Tobias la Fleur, Alexandros Karakitsos, Satya Signh
  * @version 1.0
  */
@@ -80,6 +81,7 @@ public class Client {
     }
 
     /**
+     *
      * @param message Message objekt som skall skickas till servern
      */
     public void sendMessage(Message message) {
