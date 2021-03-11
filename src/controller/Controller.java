@@ -11,9 +11,8 @@ import java.util.List;
 
 
 /**
- *
  * Klassen Controller sköter kommunikation mellan view-klasserna och model-klasserna
- * @author Philip Persson, Måns Olsson, Tobias la Fleur, Alexandros Karakitsos, Satya Singh
+ * @author Philip Persson, Måns Olsson, Tobias la Fleur, Alexandros Karakitsos, Satya Signh
  * @version 1.0
  */
 public class Controller {
@@ -29,8 +28,8 @@ public class Controller {
 
     /**
      * metoden skapar en användare
-     * @param username namnet på användaren som ska skapas
-     * @param icon ikonen som tillhör användaren som ska skapas
+     * @param username
+     * @param icon
      */
     public void setUser(String username, ImageIcon icon) {
         User user = new User(username, icon);

@@ -17,7 +17,6 @@ public class Message implements Serializable {
     private ImageIcon icon;
     private User user;
     private ArrayList<String> receivers;
-
     private LocalDateTime messageReceived;
     private LocalDateTime messageSent;
 

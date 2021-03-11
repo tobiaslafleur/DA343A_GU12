@@ -1,7 +1,6 @@
 package model.server;
-
 /**
- * Klassen StartServer används endast för att starta en ny server
+ * Startar servern
  * @version 1.0
  * @author Tobias la Fleur, Philip Persson, Måns Olsson, Satya Singh, Alexandros Karakitsos
  */

@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
-
 /**
  * Klassen ServerPanel bygger upp och initierar GUI för Servern
  * @version 1.0

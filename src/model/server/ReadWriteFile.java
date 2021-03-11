@@ -13,11 +13,10 @@ public class ReadWriteFile {
     private OutputStreamWriter osw;
     private FileOutputStream fos;
     private ObjectOutputStream oos;
-
     private FileInputStream fis;
     private ObjectInputStream ois;
-
     private final String filePath = "files/userlist.txt";
+
 
     /**
      * Skapar en fil om den inte redan finns och skriver sen in User objektet i filen
@@ -35,6 +34,7 @@ public class ReadWriteFile {
         }
     }
 
+
     /**
      * Kollar om användaren redan finns och har en sparad fil, detta sparas isånnafall i userlist.txt och det är den filen som körs igenom här för att kolla om användaren redan finns
      * @param user Användar stringen
@@ -47,7 +47,7 @@ public class ReadWriteFile {
 
             String line = null;
 
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 if (line.equals(user)) {
                     return true;
                 }
